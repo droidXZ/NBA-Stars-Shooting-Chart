@@ -3,7 +3,131 @@
   padding: 0;
 }
 
-h1 {
-  color: #FF6666;
-  margin: 20px auto;
+.clear {
+  clear: both;
+}
+/*  头部样式  */
+.container .header {
+  position: relative;
+  margin: 0 auto;
+  height: 62px;
+  min-width: 1250px;
+  padding: 4px;
+  background-color: #1D428A;
+}
+
+.header img {
+  height: 62px;
+  margin-left: 64px;
+}
+
+.header .title {
+  position: absolute;
+  height: 62px;
+  top: 0;
+  left: 220px;
+  text-align: center;
+}
+
+.title h1 {
+  color: #FFFFFF;
+  line-height: 48px;
+}
+
+.title p{
+  display: inline-block;
+  color: #FFFFFF;
+}
+
+.header .updateTips {
+  float: right;
+  margin-right: 16px;
+  line-height: 70px;
+  color: #FFFFFF;
+}
+/* nav 导航栏 */
+.container .navBox {
+  min-width: 600px;
+  height: 40px;
+  background-color: #032F4F;
+}
+
+.navBox .navList {
+  width: 320px;
+  margin: 0 auto;
+  height: 40px;
+  list-style: none;
+}
+
+.navList .navItem {
+  display: inline-block;
+  width: 90px;
+  height: 36px;
+  margin-left: 30px;
+  line-height: 36px;
+  text-align: center;
+}
+
+.navItem a {
+  color: #FFF;
+  text-decoration: none;
+}
+
+.navItem:hover {
+  border-bottom: 2px solid #FF6666;
+  cursor: pointer;
+}
+
+.navActive {
+  border-bottom: 2px solid #FF6666;
+}
+/*  绘制区域样式  */
+.container .warper {
+  position: relative;
+  margin: 0 auto;
+  min-width: 1250px;
+  height: 660px;
+}
+
+.warper .warper_left{
+  position: absolute;
+  width: 40%;
+  min-width: 450px;
+  top: 0;
+  left: 0;
+  height: 660px;
+  background-color: rgb(209, 89, 104);
+  /*border: 1px solid #000;*/
+}
+
+.warper .warper_right{
+  position: absolute;
+  width: 60%;
+  min-width: 800px;
+  height: 660px;
+  top: 0;
+  right: 0;
+  background-color: rgb(38, 152, 201);
+  /*border: 1px solid #000;*/
+}
+
+/* 底部样式  */
+.container .footer {
+  margin: 0 auto;
+  min-width: 1250px;
+  height: 72px;
+  background-color: #1D428A;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.footer .footerFirstLine,.footerSecondLine {
+  height: 36px;
+  line-height: 36px;
+  font-size: 14px;
+}
+
+.footer a {
+  color: #000000;
+  text-decoration: none;
 }
