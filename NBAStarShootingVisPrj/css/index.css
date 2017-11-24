@@ -6,6 +6,9 @@
 .clear {
   clear: both;
 }
+.container {
+  position: relative;
+}
 /*  头部样式  */
 .container .header {
   position: relative;
@@ -95,25 +98,22 @@
   min-width: 450px;
   top: 0;
   left: 0;
-  height: 660px;
-  background-color: rgb(209, 89, 104);
-  /*border: 1px solid #000;*/
 }
 
 .warper .warper_right{
   position: absolute;
   width: 60%;
   min-width: 800px;
-  height: 660px;
   top: 0;
   right: 0;
-  background-color: rgb(38, 152, 201);
-  /*border: 1px solid #000;*/
 }
 
 /* 底部样式  */
 .container .footer {
-  margin: 0 auto;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
   min-width: 1250px;
   height: 72px;
   background-color: #1D428A;
