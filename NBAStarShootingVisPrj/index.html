@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>NBAStarShootingVis</title>
   <link rel="stylesheet" href="css/index.css">
+  <script src="js/d3.v3.min.js" charset="utf-8"></script>
 </head>
 <body>
     <div class="container">
@@ -28,10 +29,80 @@
       </div>
       <div class="warper">
         <div class="warper_left">
-
+          <div class="top_starShow">
+            <div class="star_pic">
+              <img src="img/player/201566.png" alt="" id="starPic">
+              <img src="img/teamlogo/OKC_logo.svg" alt="" id="teamLogo">
+            </div>
+          </div>
+          <div class="top_starData">
+            <div class="top_starData_title">
+              <h4>2016-2017 Season Per Game Data</h4>
+            </div>
+            <table class="starSummary">
+              <tbody>
+                <tr>
+                  <td class="nameLable">GAMES</td>
+                  <td class="starData">81</td>
+                  <td class="starRank">#1</td>
+                </tr>
+                <tr>
+                  <td class="nameLable">MIN</td>
+                  <td class="starData">34.6</td>
+                  <td class="starRank">#12</td>
+                </tr>
+                <tr>
+                  <td class="nameLable">PTS</td>
+                  <td class="starData">31.6</td>
+                  <td class="starRank">#1</td>
+                </tr>
+                <tr>
+                  <td class="nameLable">REB</td>
+                  <td class="starData">10.7</td>
+                  <td class="starRank">#22</td>
+                </tr>
+                <tr>
+                  <td class="nameLable">AST</td>
+                  <td class="starData">10.4</td>
+                  <td class="starRank">#4</td>
+                </tr>
+                <tr>
+                  <td class="nameLable">STL</td>
+                  <td class="starData">1.63</td>
+                  <td class="starRank">#35</td>
+                </tr>
+                <tr>
+                  <td class="nameLable">BLK</td>
+                  <td class="starData">0.38</td>
+                  <td class="starRank">#112</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="starShootingChart">
+                <h2>球星投篮散点图</h2>
+          </div>
         </div>
         <div class="warper_right">
-
+          <div class="theDigDraw">
+                <h2>球星投篮热力图</h2>
+          </div>
+          <!-- <div class="shotZones">
+                <h2>球星投篮空间图 做还是不做？</h2>
+          </div> -->
+          <div class="shotFreByDis">
+                <h2>球星出手频率by距离</h2>
+          </div>
+          <div class="shotFreLeftVsRight">
+                <h2>球星出手频率左右对比</h2>
+          </div>
+          <div class="clear"></div>
+          <div class="shotFGByDis">
+                <h2>球星命中率by距离</h2>
+          </div>
+          <div class="shotFGLeftVsRight">
+                <h2>球星命中率左右对比</h2>
+          </div>
         </div>
       </div>
       <div class="footer">
@@ -46,5 +117,6 @@
         </div>
       </div>
     </div>
+    <script src="js/index.js" charset="utf-8"></script>
 </body>
 </html>

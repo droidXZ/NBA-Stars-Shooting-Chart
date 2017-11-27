@@ -8,6 +8,7 @@
 }
 .container {
   position: relative;
+  height: auto;
 }
 /*  头部样式  */
 .container .header {
@@ -89,7 +90,7 @@
   position: relative;
   margin: 0 auto;
   min-width: 1250px;
-  height: 660px;
+  height: auto;
 }
 
 .warper .warper_left{
@@ -106,13 +107,109 @@
   min-width: 800px;
   top: 0;
   right: 0;
+  padding-bottom: 72px;
+}
+
+/* 球星数据展示 */
+.warper_left .top_starShow {
+  width: 100%;
+  min-width: 450px;
+  margin-top: 15px;
+  position:relative;
+}
+
+.top_starShow .star_pic {
+  width: 220px;
+  height: 145px;
+  float: left;
+  margin-top: 20px;
+  position:relative;
+}
+
+.star_pic #starPic {
+  width: 200px;
+  height: 145px;
+  margin-left: 10px;
+  background-color: #EAEAEA;
+  border-radius: 8px;
+}
+
+.star_pic #teamLogo {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  width: 40px;
+  height: 32px;
+}
+
+.top_starData .starSummary {
+  width: 280px;
+  font-size: 14px;
+  margin-top: 5px;
+  color: #000000;
+}
+
+.starSummary .starData {
+  color: #000000;
+  font-weight: bold;
+}
+
+.starSummary .starRank {
+  color: #888888;
+}
+
+/* star投篮散点图 */
+.starShootingChart {
+  width: 100%;
+  height: 450px;
+  margin-top: 30px;
+  background-color: #FF6666;
+}
+
+
+/* 右部 绘制区域 */
+.warper_right .theDigDraw{
+  width: 100%;
+  min-width: 800px;
+  height: 400px;
+  background-color: #9f91ed;
+}
+
+.warper_right .shotFreByDis {
+  float: left;
+  width: 50%;
+  min-width: 400px;
+  height: 300px;
+  background-color: #6adfeb;
+}
+
+.warper_right .shotFreLeftVsRight {
+  float: right;
+  width: 50%;
+  min-width: 400px;
+  height: 300px;
+  background-color: #ebe43c;
+}
+
+.warper_right .shotFGByDis {
+  float: left;
+  width: 50%;
+  min-width: 400px;
+  height: 300px;
+  background-color: #22f024;
+}
+
+.warper_right .shotFGLeftVsRight {
+  float: right;
+  width: 50%;
+  min-width: 400px;
+  height: 300px;
+  background-color: #14e1ee;
 }
 
 /* 底部样式  */
 .container .footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
+  margin-top: 1000px;
   width: 100%;
   min-width: 1250px;
   height: 72px;
