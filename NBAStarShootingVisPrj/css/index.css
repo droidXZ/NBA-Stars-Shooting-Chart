@@ -85,6 +85,58 @@
 .navActive {
   border-bottom: 2px solid #FF6666;
 }
+
+/* 搜索球星区域 .*/
+.selectPlayer {
+  position: absolute;
+  top: 160px;
+  left: 450px;
+  width: 600px;
+  height: 400px;
+  background-color: #DADADA;
+  border-radius: 20px;
+  display: none;
+  z-index: 101;
+}
+
+.selectPlayer .serachPlayerBox {
+  width: 100%;
+  height: 60px;
+  border-radius: 20px;
+}
+
+.serachPlayerBox input {
+  width: 200px;
+  height: 28px;
+  margin-top: 16px;
+  margin-left: 110px;
+}
+
+.serachButtonBox {
+  float: right;
+  width: 220px;
+  height: 60px;
+  margin-right: 60px;
+}
+
+.serachPlayerBox span {
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  margin-top: 16px;
+  margin-left: 10px;
+  background-color: #415faf;
+  text-align: center;
+  line-height: 32px;
+  border-radius: 8px;
+}
+
+.serachPlayerBox span:hover {
+  cursor: pointer;
+}
+
+
+
 /*  绘制区域样式  */
 .container .warper {
   position: relative;
@@ -122,9 +174,9 @@
   width: 40%;
   min-width: 240px;
   height: 175px;
-  float: left;
   margin-top: 20px;
   position:relative;
+  float: left;
 }
 
 .star_pic #starPic {
@@ -141,6 +193,13 @@
   left: 20px;
   width: 40px;
   height: 32px;
+}
+
+.top_starInfo {
+  width: 180px;
+  margin-top: -20px;
+  margin-left: 30px;
+  text-align: center;
 }
 
 .top_starData {
@@ -177,9 +236,14 @@
   background-color: #D1D1D1;
   border: 1px solid #EAEAEA;
   border-radius: 4px;
-  margin-left: 30px;
+  margin-top: 20px;
+  margin-left: 50px;
   text-align: center;
   line-height: 32px;
+}
+
+.buttonBox:hover {
+  cursor: pointer;
 }
 
 /* star投篮散点图 */
