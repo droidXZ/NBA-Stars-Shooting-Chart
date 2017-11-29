@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 d3.json("json/16-17season.json",function(d){
 
   	console.log(d.resultSets[0].headers);
@@ -121,3 +122,6 @@ function drawCoordinate(className){
 			.attr('stroke-width', '1')
 			.attr("stroke","black");
 }
+=======
+/* 通用工具 */
+>>>>>>> d5d7bd0b2c32f0cce3ffc887d688333e7f6ab1bf
