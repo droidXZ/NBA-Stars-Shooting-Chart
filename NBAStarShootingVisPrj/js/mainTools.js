@@ -1,14 +1,36 @@
-<<<<<<< HEAD
+/* 通用工具 */
 d3.json("json/16-17season.json",function(d){
 
   	console.log(d.resultSets[0].headers);
+    starShootingChart(d);
  	var data = getShotFreData(d,201565);
 	// Derrick Rose  PLAY_ID:201565
   	ShotFrequenByDistance(data);
-
 });
 
-//获取球员投篮频率数据
+function starShootingChart(data){
+  // svg固定宽高
+  var width = 400,height=350;
+  var xmlns = "http://www.w3.org/2000/svg";
+  var version = 1.1;
+  var svg = d3.selectAll('.starShootingChart')
+              .append('svg')
+              .attr("class","svg_SSC")
+              .attr("width",width)
+              .attr("height",height)
+              .attr("version",version)
+              .attr("xmlns",xmlns);
+  //通过创建 xmlns向svg添加image图像
+  var court = document.createElementNS(xmlns,"image");
+      court.href.baseVal = "img/uipic/court.png";
+      court.setAttributeNS(null,"x",0);
+      court.setAttributeNS(null,"y",0);
+      court.setAttributeNS(null,"height","290px");
+      court.setAttributeNS(null,"width","400px");
+      document.getElementsByClassName('svg_SSC')[0].appendChild(court);
+}
+
+// 获取球员投篮频率数据
 function getShotFreData(data,player_id) {
 	//记录当前player_id球员数据
 	var dataset = [];
@@ -18,7 +40,7 @@ function getShotFreData(data,player_id) {
 	for (var i = shotTimes.length - 1; i >= 0; i--) {
 		shotTimes[i] = 0;
 	}
-	
+
 	for(var i in data.resultSets[0].rowSet){
 		if (data.resultSets[0].rowSet[i][3]==player_id) {
 			dataset[dataset.length] = data.resultSets[0].rowSet[i];
@@ -39,7 +61,7 @@ function getShotFreData(data,player_id) {
 
 //绘制ShotFrequenByDistance图
 function ShotFrequenByDistance(data) {
-	
+
 	var shotFreByDis = [];
 	var top = "5%";
 	var bottom = "85%";
@@ -122,6 +144,3 @@ function drawCoordinate(className){
 			.attr('stroke-width', '1')
 			.attr("stroke","black");
 }
-=======
-/* 通用工具 */
->>>>>>> d5d7bd0b2c32f0cce3ffc887d688333e7f6ab1bf
