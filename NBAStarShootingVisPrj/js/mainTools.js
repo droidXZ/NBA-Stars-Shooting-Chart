@@ -32,30 +32,32 @@ function starShootingChart(data){
 
   // 篮筐中心点(250,40);
   var dataset = getShotDetailData(data);
-  d3.selectAll('.svg_SSC')
-    .append("circle")
-    .attr("cx",270)
-    .attr("cy",40)
-    .attr("r",3)
-    .attr("fill","#FF6666");
+
+  // d3.selectAll('.svg_SSC')
+  //   .append("circle")
+  //   .attr("cx",270)
+  //   .attr("cy",40)
+  //   .attr("r",3)
+  //   .attr("fill","#FF6666");
 
   // 定义比例尺
   var xScale = d3.scale.linear()
                        .domain([-250,250])
                        .range([20,width]);
+
   var yScale = d3.scale.linear()
                        .domain([0,470])
-                       .range([0,height]);
+                       .range([40,520]);
   //定义坐标轴
   var xAxis = d3.svg.axis()
                     .scale(xScale)
-                    .orient("top")
-                    .ticks(12);
+                    .orient("bottom")
+                    .ticks(8);
   var yAxis = d3.svg.axis()
                     .scale(yScale)
-                    .orient("left")
+                    .orient("right")
                     .ticks(10);
-                    
+ //
   d3.selectAll(".svg_SSC")
     .append("g")
     .attr("class","axis")
@@ -65,6 +67,31 @@ function starShootingChart(data){
     .text("x轴")
     .attr("transfrom","translate(" + width - 20 + ",20)");
 
+    d3.selectAll(".svg_SSC")
+      .append("g")
+      .attr("class","axis")
+      .call(yAxis)
+      .attr("transfrom","translate(0, " + height +")")
+      .append("text")
+      .text("y轴")
+      .attr("transfrom","translate(" + height + ",0)");
+
+  d3.selectAll(".svg_SSC")
+    .selectAll("circle")
+    .data(dataset)
+    .enter()
+    .append("circle")
+    .attr("cx",function(d){
+      return xScale(d.loc_x);
+    })
+    .attr("cy",function(d){
+      return yScale(d.loc_y);
+    })
+    .attr("r",3)
+    .attr("fill","#FF6666")
+    .on("click",function(d){
+      alert(d.distance + "--" + d.loc_x + "--" + d.loc_y);
+    });
 }
 
 //获取球员投篮命中与否 距离 位置。
@@ -73,7 +100,6 @@ function getShotDetailData(data){
   var curentStarShotData = [];
   for(var i in data.resultSets[0].rowSet){
     if(data.resultSets[0].rowSet[i][3] == currentStarId){
-      console.log(data.resultSets[0].rowSet[i]);
       var el = {};
       el.action_type = data.resultSets[0].rowSet[i][10],
       el.distance = data.resultSets[0].rowSet[i][16],
