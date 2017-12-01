@@ -176,7 +176,7 @@
 .warper .warper_left{
   position: absolute;
   width: 40%;
-  min-width: 450px;
+  min-width: 600px;
   top: 0;
   left: 0;
 }
@@ -277,19 +277,20 @@
 /* star投篮散点图 */
 .starShootingChart {
   width: 100%;
+  min-width: 520px;
   height: 450px;
   margin-top: 30px;
-  background-color: #FF6666;
+  /*background-color: #FF6666;*/
 }
 
 
 /* 右部 绘制区域 */
-.warper_right .theDigDraw{
+/*.warper_right .theDigDraw{
   width: 100%;
   min-width: 800px;
-  height: 400px;
+  height: 600px;
   background-color: #9f91ed;
-}
+}*/
 
 .warper_right .shotFreByDis {
   float: left;
@@ -325,7 +326,7 @@
 
 /* 底部样式  */
 .container .footer {
-  margin-top: 1000px;
+  margin-top: 700px;
   width: 100%;
   min-width: 1250px;
   height: 72px;

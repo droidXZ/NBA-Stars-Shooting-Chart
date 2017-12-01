@@ -10,7 +10,7 @@ d3.json("json/16-17season.json",function(d){
 
 function starShootingChart(data){
   // svg固定宽高
-  var width = 400,height=350;
+  var width = 520,height = 450;
   var xmlns = "http://www.w3.org/2000/svg";
   var version = 1.1;
   var svg = d3.selectAll('.starShootingChart')
@@ -20,14 +20,71 @@ function starShootingChart(data){
               .attr("height",height)
               .attr("version",version)
               .attr("xmlns",xmlns);
+
   //通过创建 xmlns向svg添加image图像
   var court = document.createElementNS(xmlns,"image");
       court.href.baseVal = "img/uipic/court.png";
-      court.setAttributeNS(null,"x",0);
+      court.setAttributeNS(null,"x",20);
       court.setAttributeNS(null,"y",0);
-      court.setAttributeNS(null,"height","290px");
-      court.setAttributeNS(null,"width","400px");
+      court.setAttributeNS(null,"width","500px");
+      court.setAttributeNS(null,"height","362px");
       document.getElementsByClassName('svg_SSC')[0].appendChild(court);
+
+  // 篮筐中心点(250,40);
+  var dataset = getShotDetailData(data);
+  d3.selectAll('.svg_SSC')
+    .append("circle")
+    .attr("cx",270)
+    .attr("cy",40)
+    .attr("r",3)
+    .attr("fill","#FF6666");
+
+  // 定义比例尺
+  var xScale = d3.scale.linear()
+                       .domain([-250,250])
+                       .range([20,width]);
+  var yScale = d3.scale.linear()
+                       .domain([0,470])
+                       .range([0,height]);
+  //定义坐标轴
+  var xAxis = d3.svg.axis()
+                    .scale(xScale)
+                    .orient("top")
+                    .ticks(12);
+  var yAxis = d3.svg.axis()
+                    .scale(yScale)
+                    .orient("left")
+                    .ticks(10);
+                    
+  d3.selectAll(".svg_SSC")
+    .append("g")
+    .attr("class","axis")
+    .call(xAxis)
+    .attr("transfrom","translate(20, " + width - 20 +")")
+    .append("text")
+    .text("x轴")
+    .attr("transfrom","translate(" + width - 20 + ",20)");
+
+}
+
+//获取球员投篮命中与否 距离 位置。
+function getShotDetailData(data){
+  //处理数据
+  var curentStarShotData = [];
+  for(var i in data.resultSets[0].rowSet){
+    if(data.resultSets[0].rowSet[i][3] == currentStarId){
+      console.log(data.resultSets[0].rowSet[i]);
+      var el = {};
+      el.action_type = data.resultSets[0].rowSet[i][10],
+      el.distance = data.resultSets[0].rowSet[i][16],
+      el.loc_x = data.resultSets[0].rowSet[i][17],
+      el.loc_y = data.resultSets[0].rowSet[i][18];
+      curentStarShotData.push(el);
+    }
+  }
+  // 得到当前投篮位置 距离 命中与否、
+  console.log(curentStarShotData);
+  return curentStarShotData;
 }
 
 // 获取球员投篮频率数据
