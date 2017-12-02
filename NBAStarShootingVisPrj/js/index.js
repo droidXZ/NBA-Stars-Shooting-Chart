@@ -16,7 +16,7 @@
     // }
     d3.selectAll(".starPicSelect")
       .on("click",function(d){
-        alert(d3.select(this));
+        console.log(d3.select(this));
       });
     // console.log(starPics);
   }
