@@ -5,7 +5,9 @@ d3.json("json/16-17season.json",function(d){
     starShootingChart(d);
  	  var data = getShotFreData(d,currentStarId);
 	// Derrick Rose  PLAY_ID:201565
+	
   	ShotFrequenByDistance(data);
+  	getGoalByDistance(getData(d,201565));
 });
 
 function starShootingChart(data){
@@ -225,4 +227,56 @@ function getData(data,player_id){
     }
   }
   return dataset;
+}
+
+/**
+ * 得到每个距离下的左右 投篮数和进球数
+ * data id筛选后的数据
+ * shot_right 右边的投篮数
+ * goal_right 右边的命中数
+ * shot_left  左边的投篮数
+ * goal_left  左边的命中数
+ */
+function getGoalByDistance(data){
+	var shotRight = new Array(31);
+	var shotLeft = new Array(31);
+	var goalRight = new Array(31);
+	var goalLeft = new Array(31);
+	for(var i=0;i<=30;i++) {
+		shotRight[i] = 0;
+		goalRight[i] = 0;
+		shotLeft[i] = 0;
+		goalLeft[i] = 0;
+	}
+	var len = data.length;
+	console.log(len);
+	for(i = 0;i<len;i++){
+		var distance = data[i][16];
+		var x = data[i][17];
+		
+		if(distance>30) continue;
+		if(x<0){
+			shotLeft[distance]++;
+			if(!(data[i][10] === "Missed Shot")){
+				goalLeft[distance]++;
+			}
+		}
+		else{
+			shotRight[distance]++;
+			if(!(data[i][10] === "Missed Shot")){
+				goalRight[distance]++;
+			}
+		}
+	}
+	var resData = [];
+	for(i=0;i<=30;i++){
+		var e = {};
+		e.shot_right =  shotRight[i];
+		e.goal_right =  goalRight[i];
+		e.shot_left =  shotLeft[i];
+		e.goal_left =  goalLeft[i];
+		resData.push(e);
+	}
+	console.log(resData);
+	return resData;
 }
