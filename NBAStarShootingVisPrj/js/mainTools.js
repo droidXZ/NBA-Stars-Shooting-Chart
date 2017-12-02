@@ -3,7 +3,7 @@ d3.json("json/16-17season.json",function(d){
 
   	console.log(d.resultSets[0].headers);
     starShootingChart(d);
- 	var data = getShotFreData(d,currentStarId);
+ 	  var data = getShotFreData(d,currentStarId);
 	// Derrick Rose  PLAY_ID:201565
   	ShotFrequenByDistance(data);
 });
@@ -125,39 +125,32 @@ function getShotDetailData(data){
   return curentStarShotData;
 }
 
-// 获取球员投篮频率数据
+// 返回球员投篮频率数据
 function getShotFreData(data,player_id) {
 	//记录当前player_id球员数据
-	var dataset = [];
+	var dataset = getData(data,player_id);
 	//统计每个距离出手次数
 	var shotTimes = new Array(30);
 	var shotPercentage = new Array(30);
+
+  //初始化
 	for (var i = shotTimes.length - 1; i >= 0; i--) {
 		shotTimes[i] = 0;
 	}
-
-	for(var i in data.resultSets[0].rowSet){
-		if (data.resultSets[0].rowSet[i][3]==player_id) {
-			dataset[dataset.length] = data.resultSets[0].rowSet[i];
-			shotTimes[data.resultSets[0].rowSet[i][16]]++;
-		}
-	}
-
-	var sum = 0;
+  //统计每个距离出手次数
+  for(i = 0; i < dataset.length ; i++){
+    shotTimes[data.resultSets[0].rowSet[i][16]]++;
+  }
 	//计算每个距离出手百分比
-	for (var i = shotPercentage.length - 1; i >= 0; i--) {
+	for (i = shotPercentage.length - 1; i >= 0; i--) {
 		shotPercentage[i] = shotTimes[i] / dataset.length;
-		sum += shotPercentage[i];
 	}
-
-	// console.log(shotPercentage);
 	return shotPercentage;
 }
 
 //绘制ShotFrequenByDistance图
 function ShotFrequenByDistance(data) {
 
-	var shotFreByDis = [];
 	var top = "5%";
 	var bottom = "85%";
 	var left = "5%";
@@ -167,24 +160,10 @@ function ShotFrequenByDistance(data) {
 				.attr("width","100%")
 				.attr("height","100%");
 
-		// 绘制坐标轴
-		SVG.append("line")
-			.attr("x1",left)
-			.attr("y1",left)
-			.attr("x2",left)
-			.attr("y2",bottom)
-			.attr('stroke-width', '1')
-			.attr("stroke","black");
-		SVG.append("line")
-			.attr("x1",left)
-			.attr("y1",bottom)
-			.attr("x2",right)
-			.attr("y2",right)
-			.attr('stroke-width', '1')
-			.attr("stroke","black");
+	drawCoordinate(SVG,".shotFreByDis")
 
+  //获取当前DOM宽高
 	var div = document.getElementById("shotFreByDis");
-
 	var width = div.offsetWidth;	//456
 	var height = div.offsetHeight;	//300
 	console.log(width*top);
@@ -214,15 +193,11 @@ function ShotFrequenByDistance(data) {
 }
 
 //绘制坐标
-function drawCoordinate(className){
+function drawCoordinate(SVG,className){
 	var top = "5%";
 	var bottom = "85%";
 	var left = "5%";
 	var right = "85%";
-	var SVG = d3.select(className)
-				.append("svg")
-				.attr("width","100%")
-				.attr("height","100%");
 
 		SVG.append("line")
 			.attr("x1",left)
@@ -238,4 +213,16 @@ function drawCoordinate(className){
 			.attr("y2",right)
 			.attr('stroke-width', '1')
 			.attr("stroke","black");
+}
+
+//获取当前ID球员投篮数据
+function getData(data,player_id){
+  var dataset = [];
+
+  for(var i in data.resultSets[0].rowSet){
+    if (data.resultSets[0].rowSet[i][3]==player_id) {
+      dataset[dataset.length] = data.resultSets[0].rowSet[i];
+    }
+  }
+  return dataset;
 }
