@@ -3,7 +3,7 @@ d3.json("json/16-17season.json",function(d){
 
   	console.log(d.resultSets[0].headers);
     starShootingChart(d);
- 	var data = getShotFreData(d,201565);
+ 	var data = getShotFreData(d,currentStarId);
 	// Derrick Rose  PLAY_ID:201565
   	ShotFrequenByDistance(data);
 });
@@ -33,13 +33,6 @@ function starShootingChart(data){
   // 篮筐中心点(250,40);
   var dataset = getShotDetailData(data);
 
-  // d3.selectAll('.svg_SSC')
-  //   .append("circle")
-  //   .attr("cx",270)
-  //   .attr("cy",40)
-  //   .attr("r",3)
-  //   .attr("fill","#FF6666");
-
   // 定义比例尺
   var xScale = d3.scale.linear()
                        .domain([-250,250])
@@ -47,7 +40,7 @@ function starShootingChart(data){
 
   var yScale = d3.scale.linear()
                        .domain([0,470])
-                       .range([40,520]);
+                       .range([40,522]);
   //定义坐标轴
   var xAxis = d3.svg.axis()
                     .scale(xScale)
@@ -57,8 +50,8 @@ function starShootingChart(data){
                     .scale(yScale)
                     .orient("right")
                     .ticks(10);
- //
-  d3.selectAll(".svg_SSC")
+ //绘制坐标轴
+  /*d3.selectAll(".svg_SSC")
     .append("g")
     .attr("class","axis")
     .call(xAxis)
@@ -74,23 +67,37 @@ function starShootingChart(data){
       .attr("transfrom","translate(0, " + height +")")
       .append("text")
       .text("y轴")
-      .attr("transfrom","translate(" + height + ",0)");
+      .attr("transfrom","translate(" + height + ",0)");*/
 
   d3.selectAll(".svg_SSC")
-    .selectAll("circle")
+    .selectAll("rect")
     .data(dataset)
     .enter()
-    .append("circle")
-    .attr("cx",function(d){
+    .append("rect")
+    .attr("x",function(d){
       return xScale(d.loc_x);
     })
-    .attr("cy",function(d){
+    .attr("y",function(d){
       return yScale(d.loc_y);
     })
-    .attr("r",3)
-    .attr("fill","#FF6666")
-    .on("click",function(d){
-      alert(d.distance + "--" + d.loc_x + "--" + d.loc_y);
+    .attr("width",8)
+    .attr("height",8)
+    .attr("fill",function(d){
+      if(d.action_type === 0){
+        return "#66fff6";
+      }else {
+        return "#F40000";
+      }
+    })
+    .on("mouseover",function(d){
+      d3.select(this)
+        .attr("stroke-width",2)
+        .attr("stroke","#05b80c");
+    })
+    .on("mouseout",function(d){
+      d3.select(this)
+        .attr("stroke-width",0)
+        .attr("stroke","rgba(255,255,255,0)");
     });
 }
 
@@ -101,7 +108,12 @@ function getShotDetailData(data){
   for(var i in data.resultSets[0].rowSet){
     if(data.resultSets[0].rowSet[i][3] == currentStarId){
       var el = {};
-      el.action_type = data.resultSets[0].rowSet[i][10],
+      if(data.resultSets[0].rowSet[i][10] === "Missed Shot"){
+        el.action_type = 0;
+      }else {
+        el.action_type = 1;
+      }
+      // el.action_type = data.resultSets[0].rowSet[i][10],
       el.distance = data.resultSets[0].rowSet[i][16],
       el.loc_x = data.resultSets[0].rowSet[i][17],
       el.loc_y = data.resultSets[0].rowSet[i][18];
