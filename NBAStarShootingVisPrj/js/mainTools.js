@@ -3,11 +3,12 @@ d3.json("json/16-17season.json",function(d){
 
   	console.log(d.resultSets[0].headers);
     starShootingChart(d);
- 	  var data = getShotFreData(d,currentStarId);
+ 	  var data = getData(d,currentStarId);
 	// Derrick Rose  PLAY_ID:201565
 	
   	ShotFrequenByDistance(data);
-  	getGoalByDistance(getData(d,201565));
+  	drawFieldGoalLR(data);
+  	//getGoalByDistance(getData(d,201565));
 });
 
 function starShootingChart(data){
@@ -168,7 +169,6 @@ function ShotFrequenByDistance(data) {
 	var div = document.getElementById("shotFreByDis");
 	var width = div.offsetWidth;	//456
 	var height = div.offsetHeight;	//300
-	console.log(width*top);
 
 	// 设置比例尺
 	var xScale = d3.scale.linear()
@@ -249,7 +249,6 @@ function getGoalByDistance(data){
 		goalLeft[i] = 0;
 	}
 	var len = data.length;
-	console.log(len);
 	for(i = 0;i<len;i++){
 		var distance = data[i][16];
 		var x = data[i][17];
@@ -277,6 +276,68 @@ function getGoalByDistance(data){
 		e.goal_left =  goalLeft[i];
 		resData.push(e);
 	}
-	console.log(resData);
 	return resData;
+}
+
+/**
+ * 绘制左右对比的命中率图
+ */
+function drawFieldGoalLR(data){
+	var top = 5;
+	var bottom = 85;
+	var left = 5;
+	var right = 85;
+	var mid = (left+right)/2;
+	var div = (bottom - top)/31;
+	var svg = d3.select(".shotFGLeftVsRight")
+				.append("svg")
+				.attr("width","100%")
+				.attr("height","100%");
+	drawCoordinate(svg,".shotFGLeftVsRight");
+	svg.append("line")
+			.attr("x1",mid+"%")
+			.attr("y1",top+"%")
+			.attr("x2",mid+"%")
+			.attr("y2",bottom+"%")
+			.attr('stroke-width', '1')
+			.attr("stroke","gray");
+	var dataset = getGoalByDistance(data);
+	console.log(dataset);
+	var maxShot = 0;
+	var shotData = [];
+	for(i=0;i<=30;i++){
+		shotData.push(dataset[i].shot_left);
+		shotData.push(dataset[i].shot_right);
+		if(maxShot<dataset[i].shot_left) maxShot = dataset[i].shot_left;
+		if(maxShot<dataset[i].shot_right) maxShot = dataset[i].shot_right;
+	}
+	var divW;
+	if(maxShot<100) divW = (right-mid)/100;
+	else divW = (right-mid)/maxShot;
+	
+	svg.selectAll("rect")
+			.data(shotData)
+			.enter()
+			.append("rect")
+			.attr("fill", function(d,i){
+				if(i % 2 === 0) return "#0f0";
+				else return "#00f";})
+		    .attr("x", function(d,i){
+		    	if(i%2 === 0)return (mid-divW*shotData[i]).toString()+"%";
+		    	else return mid+"%";})
+			.attr("y", function(d,i) {
+				if(i%2 === 0) return (bottom-div*(i/2+1)).toString()+"%";
+				else return (bottom-div*((i-1)/2+1)).toString()+"%";})
+			.attr("width", function(d,i) {return (divW*shotData[i]).toString()+"%";})
+			.attr("height",div+"%");
+			
+//	svg.selectAll("rect")
+//			.data(lData)
+//			.enter()
+//			.append("rect")
+//			.attr("fill", function(){return "#00f"})
+//		    .attr("x",  function(d,i) {return (mid-divW*lData[i]).toString()+"%"})
+//			.attr("y", function(d,i) {return (bottom-div*(i+1)).toString()+"%"})
+//			.attr("width", function(d,i) {return (divW*lData[i]).toString()+"%"})
+//			.attr("height",div+"%");
 }
