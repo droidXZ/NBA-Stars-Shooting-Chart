@@ -7,7 +7,9 @@ d3.json("json/16-17season.json",function(d){
 	// Derrick Rose  PLAY_ID:201565
 	
   	ShotFrequenByDistance(data);
+  	drawShotFreLR(data);
   	drawFieldGoalLR(data);
+  	
   	//getGoalByDistance(getData(d,201565));
 });
 
@@ -280,20 +282,20 @@ function getGoalByDistance(data){
 }
 
 /**
- * 绘制左右对比的命中率图
+ * 绘制左右对比的投篮频率图
  */
-function drawFieldGoalLR(data){
+function drawShotFreLR(data){
 	var top = 5;
 	var bottom = 85;
 	var left = 5;
 	var right = 85;
 	var mid = (left+right)/2;
 	var div = (bottom - top)/31;
-	var svg = d3.select(".shotFGLeftVsRight")
+	var svg = d3.select(".shotFreLeftVsRight")
 				.append("svg")
 				.attr("width","100%")
 				.attr("height","100%");
-	drawCoordinate(svg,".shotFGLeftVsRight");
+	drawCoordinate(svg,".shotFreLeftVsRight");
 	svg.append("line")
 			.attr("x1",mid+"%")
 			.attr("y1",top+"%")
@@ -302,7 +304,6 @@ function drawFieldGoalLR(data){
 			.attr('stroke-width', '1')
 			.attr("stroke","gray");
 	var dataset = getGoalByDistance(data);
-	console.log(dataset);
 	var maxShot = 0;
 	var shotData = [];
 	for(i=0;i<=30;i++){
@@ -341,13 +342,61 @@ function drawFieldGoalLR(data){
 				});
 			})
 			
-//	svg.selectAll("rect")
-//			.data(lData)
-//			.enter()
-//			.append("rect")
-//			.attr("fill", function(){return "#00f"})
-//		    .attr("x",  function(d,i) {return (mid-divW*lData[i]).toString()+"%"})
-//			.attr("y", function(d,i) {return (bottom-div*(i+1)).toString()+"%"})
-//			.attr("width", function(d,i) {return (divW*lData[i]).toString()+"%"})
-//			.attr("height",div+"%");
+}
+
+/**
+ * 绘制左右对比的命中率图
+ */
+function drawFieldGoalLR(data){
+	var top = 5;
+	var bottom = 85;
+	var left = 5;
+	var right = 85;
+	var mid = (left+right)/2;
+	var div = (bottom - top)/31;
+	var svg = d3.select(".shotFGLeftVsRight")
+				.append("svg")
+				.attr("width","100%")
+				.attr("height","100%");
+	drawCoordinate(svg,".shotFGLeftVsRight");
+	svg.append("line")
+			.attr("x1",mid+"%")
+			.attr("y1",top+"%")
+			.attr("x2",mid+"%")
+			.attr("y2",bottom+"%")
+			.attr('stroke-width', '1')
+			.attr("stroke","gray");
+	var dataset = getGoalByDistance(data);
+	var shotData = [];
+	for(i=0;i<=30;i++){
+		shotData.push(dataset[i].goal_left/dataset[i].shot_left);
+		shotData.push(dataset[i].goal_right/dataset[i].shot_right);
+	}
+	var divW = (right - mid)/100;
+	svg.selectAll("rect")
+			.data(shotData)
+			.enter()
+			.append("rect")
+			.attr("fill", function(d,i){
+				if(i % 2 === 0) return "#0f0";
+				else return "#00f";})
+		    .attr("x", function(d,i){
+		    	if(i%2 === 0)return (mid-divW*shotData[i]*100).toString()+"%";
+		    	else return mid+"%";})
+			.attr("y", function(d,i) {
+				if(i%2 === 0) return (bottom-div*(i/2+1)).toString()+"%";
+				else return (bottom-div*((i-1)/2+1)).toString()+"%";})
+			.attr("width", function(d,i) {return (divW*shotData[i]*100).toString()+"%";})
+			.attr("height",div+"%")
+			.on("mouseover",function(){
+				d3.select(this,).attr("fill","orange");
+			})
+			.on("mouseout",function(d,i){
+				d3.select(this)
+				.attr("fill",function(){
+					if(i % 2 === 0) return "#0f0";
+					else return "#00f";
+				});
+			})
+			
 }
