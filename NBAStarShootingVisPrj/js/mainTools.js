@@ -329,7 +329,17 @@ function drawFieldGoalLR(data){
 				if(i%2 === 0) return (bottom-div*(i/2+1)).toString()+"%";
 				else return (bottom-div*((i-1)/2+1)).toString()+"%";})
 			.attr("width", function(d,i) {return (divW*shotData[i]).toString()+"%";})
-			.attr("height",div+"%");
+			.attr("height",div+"%")
+			.on("mouseover",function(){
+				d3.select(this,).attr("fill","orange");
+			})
+			.on("mouseout",function(d,i){
+				d3.select(this)
+				.attr("fill",function(){
+					if(i % 2 === 0) return "#0f0";
+					else return "#00f";
+				});
+			})
 			
 //	svg.selectAll("rect")
 //			.data(lData)
