@@ -51,7 +51,7 @@ function starShootingChart(data){
                     .orient("right")
                     .ticks(10);
  //绘制坐标轴
-  /*d3.selectAll(".svg_SSC")
+  d3.selectAll(".svg_SSC")
     .append("g")
     .attr("class","axis")
     .call(xAxis)
@@ -67,7 +67,7 @@ function starShootingChart(data){
       .attr("transfrom","translate(0, " + height +")")
       .append("text")
       .text("y轴")
-      .attr("transfrom","translate(" + height + ",0)");*/
+      .attr("transfrom","translate(" + height + ",0)");
 
   d3.selectAll(".svg_SSC")
     .selectAll("rect")
@@ -151,26 +151,21 @@ function getShotFreData(data,player_id) {
 //绘制ShotFrequenByDistance图
 function ShotFrequenByDistance(data) {
 
-	var top = "5%";
-	var bottom = "85%";
-	var left = "5%";
-	var right = "85%";
+	 //获取当前DOM宽高
+  var div = document.getElementById("shotFreByDis");
+  var width = div.offsetWidth;  //456
+  var height = div.offsetHeight;  //400
+
 	var SVG = d3.select(".shotFreByDis")
 				.append("svg")
-				.attr("width","100%")
-				.attr("height","100%");
+				.attr("width",width)
+				.attr("height",height);
 
-	drawCoordinate(SVG,".shotFreByDis")
-
-  //获取当前DOM宽高
-	var div = document.getElementById("shotFreByDis");
-	var width = div.offsetWidth;	//456
-	var height = div.offsetHeight;	//300
-	console.log(width*top);
+	drawCoordinate(SVG,".shotFreByDis");
 
 	// 设置比例尺
 	var xScale = d3.scale.linear()
-					.domain([1,30])
+					.domain([0,30])
 					.range([width*0.1,width - width*0.1]);
 	var yScale = d3.scale.linear()
 					.domain([0,0.25])
@@ -194,25 +189,39 @@ function ShotFrequenByDistance(data) {
 
 //绘制坐标
 function drawCoordinate(SVG,className){
-	var top = "5%";
-	var bottom = "85%";
-	var left = "5%";
-	var right = "85%";
 
-		SVG.append("line")
-			.attr("x1",left)
-			.attr("y1",left)
-			.attr("x2",left)
-			.attr("y2",bottom)
-			.attr('stroke-width', '1')
-			.attr("stroke","black");
-		SVG.append("line")
-			.attr("x1",left)
-			.attr("y1",bottom)
-			.attr("x2",right)
-			.attr("y2",right)
-			.attr('stroke-width', '1')
-			.attr("stroke","black");
+  //获取当前DOM宽高
+  var div = document.getElementById("shotFreByDis");
+  var width = div.offsetWidth;  //456
+  var height = div.offsetHeight;  //400
+  var padding = 40;
+  
+  // 设置比例尺
+  xScale = d3.scale.linear()
+          .domain([0,30])
+          .range([0,width - padding*2]);
+  yScale = d3.scale.linear()
+          .domain([0.25,0])
+          .range([0,height - padding*2]);
+
+  var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient("bottom")
+        .ticks(6);
+  var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left")
+        .ticks(5);
+  
+  SVG.append("g")  
+      .attr("class","axis")  
+      .attr("transform","translate(" + padding +"," + (height - padding) + ")")
+      .call(xAxis);  
+
+  SVG.append("g")
+          .attr("class","axis")
+          .attr("transform","translate(" + padding +","+ padding +")")//指定坐标轴说明的坐标
+          .call(yAxis);
 }
 
 //获取当前ID球员投篮数据
