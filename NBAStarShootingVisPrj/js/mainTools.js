@@ -5,11 +5,11 @@ d3.json("json/16-17season.json",function(d){
     starShootingChart(d);
  	  var data = getData(d,currentStarId);
 	// Derrick Rose  PLAY_ID:201565
-	
+
   	ShotFrequenByDistance(data);
   	drawShotFreLR(data);
   	drawFieldGoalLR(data);
-  	
+
   	//getGoalByDistance(getData(d,201565));
 });
 
@@ -254,7 +254,7 @@ function getGoalByDistance(data){
 	for(i = 0;i<len;i++){
 		var distance = data[i][16];
 		var x = data[i][17];
-		
+
 		if(distance>30) continue;
 		if(x<0){
 			shotLeft[distance]++;
@@ -315,7 +315,7 @@ function drawShotFreLR(data){
 	var divW;
 	if(maxShot<100) divW = (right-mid)/100;
 	else divW = (right-mid)/maxShot;
-	
+
 	svg.selectAll("rect")
 			.data(shotData)
 			.enter()
@@ -341,7 +341,7 @@ function drawShotFreLR(data){
 					else return "#00f";
 				});
 			})
-			
+
 }
 
 /**
@@ -398,5 +398,5 @@ function drawFieldGoalLR(data){
 					else return "#00f";
 				});
 			})
-			
+
 }

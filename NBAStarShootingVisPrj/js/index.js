@@ -16,10 +16,12 @@
     // }
     d3.selectAll(".starPicSelect")
       .on("click",function(d){
-        console.log(d3.select(this));
+        changeCurrentStar();
+        alert(d3.select(this));
       });
     // console.log(starPics);
   }
+
   document.getElementById('hideButton').onclick = function(){
     document.getElementsByClassName('selectPlayer')[0].style.display = 'none';
 }
