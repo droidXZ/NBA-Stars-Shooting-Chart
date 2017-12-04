@@ -300,7 +300,7 @@
   width: 50%;
   min-width: 400px;
   height: 400px;
-  background-color: #6adfeb;
+  /*background-color: #6adfeb;*/
 }
 
 .warper_right .shotFreLeftVsRight {
@@ -308,7 +308,7 @@
   width: 50%;
   min-width: 400px;
   height: 400px;
-  background-color: #ebe43c;
+  /*background-color: #ebe43c;*/
 }
 
 .warper_right .shotFGByDis {
@@ -316,7 +316,7 @@
   width: 50%;
   min-width: 400px;
   height: 400px;
-  background-color: #22f024;
+  /*background-color: #22f024;*/
 }
 
 .warper_right .shotFGLeftVsRight {
@@ -324,7 +324,7 @@
   width: 50%;
   min-width: 400px;
   height: 400px;
-  background-color: #14e1ee;
+  /*background-color: #14e1ee;*/
 }
 
 /* 底部样式  */

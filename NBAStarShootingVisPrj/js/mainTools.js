@@ -3,9 +3,14 @@ d3.json("json/16-17season.json",function(d){
 
   	console.log(d.resultSets[0].headers);
     starShootingChart(d);
- 	  var data = getShotFreData(d,currentStarId);
+ 	  var data = getData(d,currentStarId);
 	// Derrick Rose  PLAY_ID:201565
+
   	ShotFrequenByDistance(data);
+  	drawShotFreLR(data);
+  	drawFieldGoalLR(data);
+
+  	//getGoalByDistance(getData(d,201565));
 });
 
 function starShootingChart(data){
@@ -51,7 +56,7 @@ function starShootingChart(data){
                     .orient("right")
                     .ticks(10);
  //绘制坐标轴
-  d3.selectAll(".svg_SSC")
+  /*d3.selectAll(".svg_SSC")
     .append("g")
     .attr("class","axis")
     .call(xAxis)
@@ -67,7 +72,7 @@ function starShootingChart(data){
       .attr("transfrom","translate(0, " + height +")")
       .append("text")
       .text("y轴")
-      .attr("transfrom","translate(" + height + ",0)");
+      .attr("transfrom","translate(" + height + ",0)");*/
 
   d3.selectAll(".svg_SSC")
     .selectAll("rect")
@@ -151,21 +156,25 @@ function getShotFreData(data,player_id) {
 //绘制ShotFrequenByDistance图
 function ShotFrequenByDistance(data) {
 
-	 //获取当前DOM宽高
-  var div = document.getElementById("shotFreByDis");
-  var width = div.offsetWidth;  //456
-  var height = div.offsetHeight;  //400
-
+	var top = "5%";
+	var bottom = "85%";
+	var left = "5%";
+	var right = "85%";
 	var SVG = d3.select(".shotFreByDis")
 				.append("svg")
-				.attr("width",width)
-				.attr("height",height);
+				.attr("width","100%")
+				.attr("height","100%");
 
-	drawCoordinate(SVG,".shotFreByDis");
+	drawCoordinate(SVG,".shotFreByDis")
+
+  //获取当前DOM宽高
+	var div = document.getElementById("shotFreByDis");
+	var width = div.offsetWidth;	//456
+	var height = div.offsetHeight;	//300
 
 	// 设置比例尺
 	var xScale = d3.scale.linear()
-					.domain([0,30])
+					.domain([1,30])
 					.range([width*0.1,width - width*0.1]);
 	var yScale = d3.scale.linear()
 					.domain([0,0.25])
@@ -177,20 +186,19 @@ function ShotFrequenByDistance(data) {
 					.enter()
 					.append("circle");
 
-	circles.attr("cx",function (d,i) {
-				return xScale(i);
-			})
-			.attr("cy",function (d,i){
-				return height - yScale(d);
-			})
-			.attr("r","5")
-			.attr("fill","Salmon");
+	// circles.attr("cx",function (d,i) {
+	// 			return xScale(i);
+	// 		})
+	// 		.attr("cy",function (d,i){
+	// 			return height - yScale(d);
+	// 		})
+	// 		.attr("r","5")
+	// 		.attr("fill","Salmon");
 }
 
 //绘制坐标
 function drawCoordinate(SVG,className){
-
-  //获取当前DOM宽高
+	//获取当前DOM宽高
   var div = document.getElementById("shotFreByDis");
   var width = div.offsetWidth;  //456
   var height = div.offsetHeight;  //400
@@ -220,7 +228,7 @@ function drawCoordinate(SVG,className){
 
   SVG.append("g")
           .attr("class","axis")
-          .attr("transform","translate(" + padding +","+ padding +")")//指定坐标轴说明的坐标
+          .attr("transform","translate(" + padding +","+ padding +")")
           .call(yAxis);
 }
 
@@ -234,4 +242,174 @@ function getData(data,player_id){
     }
   }
   return dataset;
+}
+
+/**
+ * 得到每个距离下的左右 投篮数和进球数
+ * data id筛选后的数据
+ * shot_right 右边的投篮数
+ * goal_right 右边的命中数
+ * shot_left  左边的投篮数
+ * goal_left  左边的命中数
+ */
+function getGoalByDistance(data){
+	var shotRight = new Array(31);
+	var shotLeft = new Array(31);
+	var goalRight = new Array(31);
+	var goalLeft = new Array(31);
+	for(var i=0;i<=30;i++) {
+		shotRight[i] = 0;
+		goalRight[i] = 0;
+		shotLeft[i] = 0;
+		goalLeft[i] = 0;
+	}
+	var len = data.length;
+	for(i = 0;i<len;i++){
+		var distance = data[i][16];
+		var x = data[i][17];
+
+		if(distance>30) continue;
+		if(x<0){
+			shotLeft[distance]++;
+			if(!(data[i][10] === "Missed Shot")){
+				goalLeft[distance]++;
+			}
+		}
+		else{
+			shotRight[distance]++;
+			if(!(data[i][10] === "Missed Shot")){
+				goalRight[distance]++;
+			}
+		}
+	}
+	var resData = [];
+	for(i=0;i<=30;i++){
+		var e = {};
+		e.shot_right =  shotRight[i];
+		e.goal_right =  goalRight[i];
+		e.shot_left =  shotLeft[i];
+		e.goal_left =  goalLeft[i];
+		resData.push(e);
+	}
+	return resData;
+}
+
+/**
+ * 绘制左右对比的投篮频率图
+ */
+function drawShotFreLR(data){
+	var top = 5;
+	var bottom = 85;
+	var left = 5;
+	var right = 85;
+	var mid = (left+right)/2;
+	var div = (bottom - top)/31;
+	var svg = d3.select(".shotFreLeftVsRight")
+				.append("svg")
+				.attr("width","100%")
+				.attr("height","100%");
+	drawCoordinate(svg,".shotFreLeftVsRight");
+	svg.append("line")
+			.attr("x1",mid+"%")
+			.attr("y1",top+"%")
+			.attr("x2",mid+"%")
+			.attr("y2",bottom+"%")
+			.attr('stroke-width', '1')
+			.attr("stroke","gray");
+	var dataset = getGoalByDistance(data);
+	var maxShot = 0;
+	var shotData = [];
+	for(i=0;i<=30;i++){
+		shotData.push(dataset[i].shot_left);
+		shotData.push(dataset[i].shot_right);
+		if(maxShot<dataset[i].shot_left) maxShot = dataset[i].shot_left;
+		if(maxShot<dataset[i].shot_right) maxShot = dataset[i].shot_right;
+	}
+	var divW;
+	if(maxShot<100) divW = (right-mid)/100;
+	else divW = (right-mid)/maxShot;
+
+	svg.selectAll("rect")
+			.data(shotData)
+			.enter()
+			.append("rect")
+			.attr("fill", function(d,i){
+				if(i % 2 === 0) return "#0f0";
+				else return "#00f";})
+		    .attr("x", function(d,i){
+		    	if(i%2 === 0)return (mid-divW*shotData[i]).toString()+"%";
+		    	else return mid+"%";})
+			.attr("y", function(d,i) {
+				if(i%2 === 0) return (bottom-div*(i/2+1)).toString()+"%";
+				else return (bottom-div*((i-1)/2+1)).toString()+"%";})
+			.attr("width", function(d,i) {return (divW*shotData[i]).toString()+"%";})
+			.attr("height",div+"%")
+			.on("mouseover",function(){
+				d3.select(this,).attr("fill","orange");
+			})
+			.on("mouseout",function(d,i){
+				d3.select(this)
+				.attr("fill",function(){
+					if(i % 2 === 0) return "#0f0";
+					else return "#00f";
+				});
+			})
+
+}
+
+/**
+ * 绘制左右对比的命中率图
+ */
+function drawFieldGoalLR(data){
+	var top = 5;
+	var bottom = 85;
+	var left = 5;
+	var right = 85;
+	var mid = (left+right)/2;
+	var div = (bottom - top)/31;
+	var svg = d3.select(".shotFGLeftVsRight")
+				.append("svg")
+				.attr("width","100%")
+				.attr("height","100%");
+	drawCoordinate(svg,".shotFGLeftVsRight");
+	svg.append("line")
+			.attr("x1",mid+"%")
+			.attr("y1",top+"%")
+			.attr("x2",mid+"%")
+			.attr("y2",bottom+"%")
+			.attr('stroke-width', '1')
+			.attr("stroke","gray");
+	var dataset = getGoalByDistance(data);
+	var shotData = [];
+	for(i=0;i<=30;i++){
+		shotData.push(dataset[i].goal_left/dataset[i].shot_left);
+		shotData.push(dataset[i].goal_right/dataset[i].shot_right);
+	}
+	var divW = (right - mid)/100;
+	svg.selectAll("rect")
+			.data(shotData)
+			.enter()
+			.append("rect")
+			.attr("fill", function(d,i){
+				if(i % 2 === 0) return "#0f0";
+				else return "#00f";})
+		    .attr("x", function(d,i){
+		    	if(i%2 === 0)return (mid-divW*shotData[i]*100).toString()+"%";
+		    	else return mid+"%";})
+			.attr("y", function(d,i) {
+				if(i%2 === 0) return (bottom-div*(i/2+1)).toString()+"%";
+				else return (bottom-div*((i-1)/2+1)).toString()+"%";})
+			.attr("width", function(d,i) {return (divW*shotData[i]*100).toString()+"%";})
+			.attr("height",div+"%")
+			.on("mouseover",function(){
+				d3.select(this,).attr("fill","orange");
+			})
+			.on("mouseout",function(d,i){
+				d3.select(this)
+				.attr("fill",function(){
+					if(i % 2 === 0) return "#0f0";
+					else return "#00f";
+				});
+			})
+
 }
