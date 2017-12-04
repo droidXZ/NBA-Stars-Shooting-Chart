@@ -186,14 +186,14 @@ function ShotFrequenByDistance(data) {
 					.enter()
 					.append("circle");
 
-	circles.attr("cx",function (d,i) {
-				return xScale(i);
-			})
-			.attr("cy",function (d,i){
-				return height - yScale(d);
-			})
-			.attr("r","5")
-			.attr("fill","Salmon");
+	// circles.attr("cx",function (d,i) {
+	// 			return xScale(i);
+	// 		})
+	// 		.attr("cy",function (d,i){
+	// 			return height - yScale(d);
+	// 		})
+	// 		.attr("r","5")
+	// 		.attr("fill","Salmon");
 }
 
 //绘制坐标

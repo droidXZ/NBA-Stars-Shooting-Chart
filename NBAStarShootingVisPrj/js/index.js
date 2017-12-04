@@ -16,8 +16,16 @@
     // }
     d3.selectAll(".starPicSelect")
       .on("click",function(d){
-        changeCurrentStar();
         alert(d3.select(this));
+        var cDiv = d3.select(this);
+        console.log(cDiv);
+        //取得点击图片的球星ID和name
+        var idStr = cDiv[0][0].firstChild.getAttribute("src"),
+            nameStr = cDiv[0][0].lastChild.innerHTML;
+        idStr = idStr.slice(11);
+        idStr = idStr.substr(0,idStr.indexOf('.'))
+
+        changeCurrentStar(idStr,nameStr);
       });
     // console.log(starPics);
   }
@@ -48,6 +56,10 @@
    });
  }
 
-  function changeCurrentStar(){
-    console.log(1);
+  function changeCurrentStar(idStr,nameStr){
+    currentStar = nameStr;
+    currentStarId = Number(idStr);
+    console.log(currentStar);
+    console.log(currentStarId);
+    // 在下面调用绘制函数更改当前的信息及图片
   }
