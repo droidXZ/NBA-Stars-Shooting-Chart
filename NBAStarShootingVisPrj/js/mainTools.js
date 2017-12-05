@@ -135,8 +135,8 @@ function getShotDetailData(data){
 function getShotFreData(data) {
 
 	//统计每个距离出手次数
-	var shotTimes = new Array(30);
-	var shotPercentage = new Array(30);
+	var shotTimes = new Array(31);
+	var shotPercentage = [];
 
   //初始化
 	for (var i = shotTimes.length - 1; i >= 0; i--) {
@@ -146,10 +146,15 @@ function getShotFreData(data) {
   for(i = 0; i < data.length ; i++){
     shotTimes[data[i][16]]++;
   }
+
+  var item = {};
+  var el = [];
 	//计算每个距离出手百分比
-	for (i = shotPercentage.length - 1; i >= 0; i--) {
-		shotPercentage[i] = shotTimes[i] / data.length;
+	for (i = 0; i <= 30; i++) {
+		el[el.length] = shotTimes[i] / data.length;
 	}
+  item.Fre = el;
+  shotPercentage.push(item);
 	return shotPercentage;
 }
 
@@ -174,45 +179,47 @@ function drawShotFreByDis(data) {
   var yScale = d3.scale.linear()
           .domain([0,0.25])
           .range([padding,height]);
+  
+  var linePath=d3.svg.line()//创建一个直线生成器
+                      .x(function(d,i){
+                        return xScale(i) - padding;
+                      })
+                      .y(function(d){
+                        return height - yScale(d) - padding;
+                      })
+                      .interpolate("basis");//插值模式
+
+  SVG.selectAll("path")
+    .data(data)
+    .enter()
+    .append("path")
+    .attr("transform","translate("+padding+","+padding+")")
+    .attr("d",function(d){
+      return linePath(d.Fre);//返回线段生成器得到的路径  
+    })
+    .attr("fill","none")
+    .attr("stroke-width",3)
+    .attr("stroke","Salmon");
+
 
 	drawCoordinate(SVG,".shotFreByDis",30,0.25);
-
-
-	//绘制散点
-	var circles = SVG.selectAll("circle")
-                    .data(data)
-          					.enter() 
-          					.append("circle")
-                    .attr("r",5)
-                    .attr("cx",function(d,i){
-                      return xScale(i);
-                    })
-                    .attr("cy",function(d){
-                      return height - yScale(d);
-                    })
-                    .attr("fill","Salmon")
-                    .on("mouseover",function(){
-                      d3.select(this).attr("fill","Turquoise");
-                    })
-                    .on("mouseout",function(){
-                      d3.select(this).attr("fill","Salmon");
-                    });
 }
 
 // 返回球员投篮命中率数据
 function getShotFGData(data) {
 
   //出手次数
-  var shotTimes = new Array(30);
+  var shotTimes = new Array(31);
   //命中次数
-  var goalTimes = new Array(30);
-  var goalPercentage = new Array(30);
+  var goalTimes = new Array(31);
+  var goalPercentage = [];
 
   //初始化
   for (var i = goalTimes.length - 1; i >= 0; i--) {
     shotTimes[i] = 0;
     goalTimes[i] = 0;
   }
+
   //计算每个距离出手次数和命中次数
   for(i = 0; i < data.length ; i++){
     shotTimes[data[i][16]]++;
@@ -220,10 +227,16 @@ function getShotFGData(data) {
       goalTimes[data[i][16]]++;
     }
   }
+
+  var item = {};
+  var el = [];
   //计算每个距离命中率
-  for (i = goalPercentage.length - 1; i >= 0; i--) {
-    goalPercentage[i] = goalTimes[i] / shotTimes[i];
+  for (i = 0; i <= 30; i++) {
+    el[el.length] = goalTimes[i] / shotTimes[i];
   }
+
+  item.FG = el;
+  goalPercentage.push(item);
 
   return goalPercentage;
 }
@@ -250,27 +263,28 @@ function drawShotFGByDis(data){
           .domain([0,1])
           .range([padding,height - padding]);
 
+  var linePath=d3.svg.line()//创建一个直线生成器
+                      .x(function(d,i){
+                        return xScale(i) - padding;
+                      })
+                      .y(function(d){
+                        return height - yScale(d) - padding;
+                      })
+                      .interpolate("basis");//插值模式
+
+  SVG.selectAll("path")
+    .data(data)
+    .enter()
+    .append("path")
+    .attr("transform","translate("+padding+","+padding+")")
+    .attr("d",function(d){
+      return linePath(d.FG);//返回线段生成器得到的路径  
+    })
+    .attr("fill","none")
+    .attr("stroke-width",3)
+    .attr("stroke","Salmon");
+
   drawCoordinate(SVG,'.shotFGByDis',30,1);
-
-  SVG.selectAll("circle")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("cx",function(d,i){
-        return xScale(i);
-      })
-      .attr("cy",function(d){
-        return height - yScale(d);
-      })
-      .attr("r",5)
-      .attr("fill","Salmon")
-      .on("mouseover",function(){
-        d3.select(this).attr("fill","Turquoise");
-      })
-      .on("mouseout",function(){
-        d3.select(this).attr("fill","Salmon");
-      });
-
 }
 
 //绘制坐标
@@ -298,7 +312,7 @@ function drawCoordinate(SVG,className,xMax,yMax){
         .orient("left")
         .ticks(5);
   
-  SVG.append("g")  
+  SVG.append("g")
       .attr("class","axis")  
       .attr("transform","translate(" + padding +"," + (height - padding) + ")")
       .call(xAxis);
