@@ -421,15 +421,11 @@ function drawShotFreLR(data){
 				else return (bottom-div*((i-1)/2+1)).toString()+"%";})
 			.attr("width", function(d,i) {return (divW*shotData[i]).toString()+"%";})
 			.attr("height",div+"%")
-			.on("mouseover",function(){
-				d3.select(this,).attr("fill","orange");
+			.on("mouseover",function(data,index){
+				LeftVsRightMouseover(index);
 			})
 			.on("mouseout",function(d,i){
-				d3.select(this)
-				.attr("fill",function(){
-					if(i % 2 === 0) return "#0f0";
-					else return "#00f";
-				});
+				LeftVsRightMouseover(-1);//恢复原色
 			})
 
 }
@@ -478,15 +474,28 @@ function drawFieldGoalLR(data){
 				else return (bottom-div*((i-1)/2+1)).toString()+"%";})
 			.attr("width", function(d,i) {return (divW*shotData[i]*100).toString()+"%";})
 			.attr("height",div+"%")
-			.on("mouseover",function(){
-				d3.select(this,).attr("fill","orange");
+			.on("mouseover",function(data,index){
+				LeftVsRightMouseover(index);
 			})
 			.on("mouseout",function(d,i){
-				d3.select(this)
-				.attr("fill",function(){
-					if(i % 2 === 0) return "#0f0";
-					else return "#00f";
-				});
+				LeftVsRightMouseover(-1);//恢复原色
 			})
 
+}
+
+/**
+ * 左右对比矩形变色效果
+ * @param {Object} index 点击的index  index/2是 distance
+ */
+function LeftVsRightMouseover(index){
+	d3.select(".shotFreLeftVsRight").selectAll("rect").attr("fill",function(d,i){
+		if(Math.floor(index/2)===Math.floor(i/2))return "orange";
+		else if(i%2==0) return "#0f0";
+		else return "#00f";
+	});
+	d3.select(".shotFGLeftVsRight").selectAll("rect").attr("fill",function(d,i){
+		if(Math.floor(index/2)===Math.floor(i/2))return "orange";
+		else if(i%2==0) return "#0f0";
+		else return "#00f";
+	});
 }
