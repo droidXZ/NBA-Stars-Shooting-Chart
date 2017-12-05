@@ -3,10 +3,11 @@ d3.json("json/16-17season.json",function(d){
 
   	console.log(d.resultSets[0].headers);
     starShootingChart(d);
- 	  var data = getData(d,currentStarId);
-	// Derrick Rose  PLAY_ID:201565
+    
+    var data = getData(d,currentStarId);
 
-  	ShotFrequenByDistance(data);
+  	drawShotFreByDis(getShotFreData(data));
+    drawShotFGByDis(getShotFGData(data));
   	drawShotFreLR(data);
   	drawFieldGoalLR(data);
 
@@ -131,9 +132,8 @@ function getShotDetailData(data){
 }
 
 // 返回球员投篮频率数据
-function getShotFreData(data,player_id) {
-	//记录当前player_id球员数据
-	var dataset = getData(data,player_id);
+function getShotFreData(data) {
+
 	//统计每个距离出手次数
 	var shotTimes = new Array(30);
 	var shotPercentage = new Array(30);
@@ -143,73 +143,150 @@ function getShotFreData(data,player_id) {
 		shotTimes[i] = 0;
 	}
   //统计每个距离出手次数
-  for(i = 0; i < dataset.length ; i++){
-    shotTimes[data.resultSets[0].rowSet[i][16]]++;
+  for(i = 0; i < data.length ; i++){
+    shotTimes[data[i][16]]++;
   }
 	//计算每个距离出手百分比
 	for (i = shotPercentage.length - 1; i >= 0; i--) {
-		shotPercentage[i] = shotTimes[i] / dataset.length;
+		shotPercentage[i] = shotTimes[i] / data.length;
 	}
 	return shotPercentage;
 }
 
 //绘制ShotFrequenByDistance图
-function ShotFrequenByDistance(data) {
+function drawShotFreByDis(data) {
 
-	var top = "5%";
-	var bottom = "85%";
-	var left = "5%";
-	var right = "85%";
+  var padding = 50;
 	var SVG = d3.select(".shotFreByDis")
-				.append("svg")
-				.attr("width","100%")
-				.attr("height","100%");
-
-	drawCoordinate(SVG,".shotFreByDis")
+      				.append("svg")
+      				.attr("width","100%")
+      				.attr("height","100%");
 
   //获取当前DOM宽高
-	var div = document.getElementById("shotFreByDis");
-	var width = div.offsetWidth;	//456
-	var height = div.offsetHeight;	//300
+  var div = d3.select(".shotFreByDis");
+  var width = div[0][0].offsetWidth;  //456
+  var height = div[0][0].offsetHeight;  //400
 
-	// 设置比例尺
-	var xScale = d3.scale.linear()
-					.domain([1,30])
-					.range([width*0.1,width - width*0.1]);
-	var yScale = d3.scale.linear()
-					.domain([0,0.25])
-					.range([50,height]);
+  // 设置比例尺
+  var xScale = d3.scale.linear()
+          .domain([0,30])
+          .range([padding,width - padding]);
+  var yScale = d3.scale.linear()
+          .domain([0,0.25])
+          .range([padding,height]);
+
+	drawCoordinate(SVG,".shotFreByDis",30,0.25);
+
 
 	//绘制散点
 	var circles = SVG.selectAll("circle")
-					.data(data)
-					.enter()
-					.append("circle");
+                    .data(data)
+          					.enter() 
+          					.append("circle")
+                    .attr("r",5)
+                    .attr("cx",function(d,i){
+                      return xScale(i);
+                    })
+                    .attr("cy",function(d){
+                      return height - yScale(d);
+                    })
+                    .attr("fill","Salmon")
+                    .on("mouseover",function(){
+                      d3.select(this).attr("fill","Turquoise");
+                    })
+                    .on("mouseout",function(){
+                      d3.select(this).attr("fill","Salmon");
+                    });
+}
 
-	// circles.attr("cx",function (d,i) {
-	// 			return xScale(i);
-	// 		})
-	// 		.attr("cy",function (d,i){
-	// 			return height - yScale(d);
-	// 		})
-	// 		.attr("r","5")
-	// 		.attr("fill","Salmon");
+// 返回球员投篮命中率数据
+function getShotFGData(data) {
+
+  //出手次数
+  var shotTimes = new Array(30);
+  //命中次数
+  var goalTimes = new Array(30);
+  var goalPercentage = new Array(30);
+
+  //初始化
+  for (var i = goalTimes.length - 1; i >= 0; i--) {
+    shotTimes[i] = 0;
+    goalTimes[i] = 0;
+  }
+  //计算每个距离出手次数和命中次数
+  for(i = 0; i < data.length ; i++){
+    shotTimes[data[i][16]]++;
+    if (data[i][10] == "Made Shot") {
+      goalTimes[data[i][16]]++;
+    }
+  }
+  //计算每个距离命中率
+  for (i = goalPercentage.length - 1; i >= 0; i--) {
+    goalPercentage[i] = goalTimes[i] / shotTimes[i];
+  }
+
+  return goalPercentage;
+}
+
+//绘制球员各距离命中率图像
+function drawShotFGByDis(data){
+
+  //获取当前DOM宽高
+  var div = d3.select(".shotFGByDis");
+  var width = div[0][0].offsetWidth;  //456
+  var height = div[0][0].offsetHeight;  //400
+  var padding = 50;
+
+  var SVG = d3.select(".shotFGByDis")
+              .append("svg")
+              .attr("width","100%")
+              .attr("height","100%");
+
+// 设置比例尺
+  var xScale = d3.scale.linear()
+          .domain([0,30])
+          .range([padding,width - padding]);
+  var yScale = d3.scale.linear()
+          .domain([0,1])
+          .range([padding,height - padding]);
+
+  drawCoordinate(SVG,'.shotFGByDis',30,1);
+
+  SVG.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx",function(d,i){
+        return xScale(i);
+      })
+      .attr("cy",function(d){
+        return height - yScale(d);
+      })
+      .attr("r",5)
+      .attr("fill","Salmon")
+      .on("mouseover",function(){
+        d3.select(this).attr("fill","Turquoise");
+      })
+      .on("mouseout",function(){
+        d3.select(this).attr("fill","Salmon");
+      });
+
 }
 
 //绘制坐标
-function drawCoordinate(SVG,className){
+function drawCoordinate(SVG,className,xMax,yMax){
 	//获取当前DOM宽高
-  var div = document.getElementById("shotFreByDis");
-  var width = div.offsetWidth;  //456
-  var height = div.offsetHeight;  //400
-  var padding = 40;
+  var div = d3.select(className);
+  var width = div[0][0].offsetWidth;  //456
+  var height = div[0][0].offsetHeight;  //400
+  var padding = 50;
   
   // 设置比例尺
   xScale = d3.scale.linear()
-          .domain([0,30])
+          .domain([0,xMax])
           .range([0,width - padding*2]);
   yScale = d3.scale.linear()
-          .domain([0.25,0])
+          .domain([yMax,0])
           .range([0,height - padding*2]);
 
   var xAxis = d3.svg.axis()
@@ -224,12 +301,12 @@ function drawCoordinate(SVG,className){
   SVG.append("g")  
       .attr("class","axis")  
       .attr("transform","translate(" + padding +"," + (height - padding) + ")")
-      .call(xAxis);  
+      .call(xAxis);
 
   SVG.append("g")
-          .attr("class","axis")
-          .attr("transform","translate(" + padding +","+ padding +")")
-          .call(yAxis);
+      .attr("class","axis")
+      .attr("transform","translate(" + padding +","+ padding +")")
+      .call(yAxis);
 }
 
 //获取当前ID球员投篮数据
