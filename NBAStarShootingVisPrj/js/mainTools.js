@@ -187,8 +187,9 @@ function drawShotFreByDis(data) {
                       .y(function(d){
                         return height - yScale(d) - padding;
                       })
-                      .interpolate("basis");//插值模式
+                      // .interpolate("basis");//插值模式
 
+  //绘制折线图
   SVG.selectAll("path")
     .data(data)
     .enter()
@@ -201,7 +202,24 @@ function drawShotFreByDis(data) {
     .attr("stroke-width",3)
     .attr("stroke","Salmon");
 
+  var dataset = data[0].Fre;
+  console.log(data[0]);
+  console.log(dataset);
+  //绘制散点
+  SVG.selectAll("circle")
+      .data(dataset)
+      .enter()
+      .append("circle")
+      .attr("r","3")
+      .attr("cx",function(d,i){
+        return xScale(i);
+      })
+      .attr("cy",function(d,i){
+        return height - yScale(d);
+      })
+      // .attr("fill","transparent");
 
+  //绘制坐标轴
 	drawCoordinate(SVG,".shotFreByDis",30,0.25);
 }
 
@@ -270,8 +288,8 @@ function drawShotFGByDis(data){
                       .y(function(d){
                         return height - yScale(d) - padding;
                       })
-                      .interpolate("basis");//插值模式
-
+                      // .interpolate("basis");//插值模式
+  //绘制折线图
   SVG.selectAll("path")
     .data(data)
     .enter()
@@ -284,6 +302,22 @@ function drawShotFGByDis(data){
     .attr("stroke-width",3)
     .attr("stroke","Salmon");
 
+  var dataset = data[0].FG;
+  //绘制散点
+  SVG.selectAll("circle")
+      .data(dataset)
+      .enter()
+      .append("circle")
+      .attr("r",3)
+      .attr("cx",function(d,i){
+        return xScale(i);
+      })
+      .attr("cy",function(d,i){
+        return height - yScale(d);
+      })
+      // .attr("fill","transparent");
+
+  //绘制坐标轴
   drawCoordinate(SVG,'.shotFGByDis',30,1);
 }
 
