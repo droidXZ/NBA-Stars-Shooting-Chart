@@ -206,18 +206,53 @@ function drawShotFreByDis(data) {
   console.log(data[0]);
   console.log(dataset);
   //绘制散点
-  SVG.selectAll("circle")
+var circles = SVG.selectAll("circle")
       .data(dataset)
       .enter()
       .append("circle")
-      .attr("r","3")
+      .attr("r",5)
       .attr("cx",function(d,i){
         return xScale(i);
       })
       .attr("cy",function(d,i){
         return height - yScale(d);
       })
-      // .attr("fill","transparent");
+      .attr("fill","transparent");
+
+  //添加一个提示框
+  var tooltip = d3.select("body")
+                  .append("div")
+                  .attr("class","tooltip")
+                  .style("opacity",0.0);
+                  
+  circles.on("mouseover",function(d){
+            /*
+            鼠标移入时，
+            （1）通过 selection.html() 来更改提示框的文字
+            （2）通过更改样式 left 和 top 来设定提示框的位置
+            （3）设定提示框的透明度为1.0（完全不透明）
+            */
+//          Math.round(d*Math.pow(10,2))/Math.pow(10,2)
+            tooltip.html(Math.round(d*100) + "%")
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY + 20) + "px")
+            .style("opacity",1.0);
+            //选中状态
+            d3.select(this).attr("fill","Salmon")
+                            .attr("stroke","DarkTurquoise")
+                            .attr("stroke-width",3);
+          })
+          .on("mousemove",function(d){
+            /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
+            tooltip.style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY + 20) + "px");
+          })
+          .on("mouseout",function(d){
+            /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+            tooltip.style("opacity",0.0);
+            d3.select(this).attr("fill","transparent")
+            .attr("stroke","none");
+          });
 
   //绘制坐标轴
 	drawCoordinate(SVG,".shotFreByDis",30,0.25);
@@ -303,19 +338,54 @@ function drawShotFGByDis(data){
     .attr("stroke","Salmon");
 
   var dataset = data[0].FG;
+
   //绘制散点
-  SVG.selectAll("circle")
-      .data(dataset)
-      .enter()
-      .append("circle")
-      .attr("r",3)
-      .attr("cx",function(d,i){
-        return xScale(i);
-      })
-      .attr("cy",function(d,i){
-        return height - yScale(d);
-      })
-      // .attr("fill","transparent");
+  var circles = SVG.selectAll("circle")
+                    .data(dataset)
+                    .enter()
+                    .append("circle")
+                    .attr("r",5)
+                    .attr("cx",function(d,i){
+                      return xScale(i);
+                    })
+                    .attr("cy",function(d,i){
+                      return height - yScale(d);
+                    })
+                    .attr("fill","transparent");
+
+  //添加一个提示框
+  var tooltip = d3.select("body")
+                  .append("div")
+                  .attr("class","tooltip")
+                  .style("opacity",0.0);
+                  
+  circles.on("mouseover",function(d){
+      /*
+      鼠标移入时，
+      （1）通过 selection.html() 来更改提示框的文字
+      （2）通过更改样式 left 和 top 来设定提示框的位置
+      （3）设定提示框的透明度为1.0（完全不透明）
+      */
+      tooltip.html(Math.round(d*100) + "%")
+      .style("left", (d3.event.pageX) + "px")
+      .style("top", (d3.event.pageY + 20) + "px")
+      .style("opacity",1.0);
+      //选中状态
+      d3.select(this).attr("fill","Salmon")
+                      .attr("stroke","DarkTurquoise")
+                      .attr("stroke-width",3);
+    })
+  .on("mousemove",function(d){
+    /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
+    tooltip.style("left", (d3.event.pageX) + "px")
+    .style("top", (d3.event.pageY + 20) + "px");
+  })
+  .on("mouseout",function(d){
+    /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+    tooltip.style("opacity",0.0);
+    d3.select(this).attr("fill","transparent")
+    .attr("stroke","none");
+  });
 
   //绘制坐标轴
   drawCoordinate(SVG,'.shotFGByDis',30,1);
