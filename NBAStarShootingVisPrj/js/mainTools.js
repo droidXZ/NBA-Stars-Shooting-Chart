@@ -471,13 +471,17 @@ function drawShotFreLR(data){
 				if(i%2 === 0) return height-padding-div*(i/2+1);
 				else return height-padding-div*((i-1)/2+1);})
 			.attr("width", function(d,i) {return divW*shotData[i];})
-			.attr("height",div)
-			.on("mouseover",function(data,index){
-				LeftVsRightMouseover(index);
-			})
-			.on("mouseout",function(d,i){
-				LeftVsRightMouseover(-1);//恢复原色
-			})
+			.attr("height",div);
+	svg.on("mousemove",function(){
+		var x = d3.event.offsetX;
+		var y = d3.event.offsetY;
+		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
+			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
+		}
+		else{
+			LeftVsRightMouseover(-1);
+		}
+	})
 
 }
 
@@ -526,12 +530,17 @@ function drawFieldGoalLR(data){
 				else return height-padding-div*((i-1)/2+1);})
 			.attr("width", function(d,i) {return divW*shotData[i]*100;})
 			.attr("height",div)
-			.on("mouseover",function(data,index){
-				LeftVsRightMouseover(index);
-			})
-			.on("mouseout",function(d,i){
-				LeftVsRightMouseover(-1);//恢复原色
-			})
+			
+	svg.on("mousemove",function(){
+		var x = d3.event.offsetX;
+		var y = d3.event.offsetY;
+		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
+			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
+		}
+		else{
+			LeftVsRightMouseover(-1);
+		}
+	})
 
 }
 
