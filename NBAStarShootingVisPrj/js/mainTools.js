@@ -26,7 +26,7 @@ function starShootingChart(data){
               .attr("height",height)
               .attr("version",version)
               .attr("xmlns",xmlns);
-
+  
   //通过创建 xmlns向svg添加image图像
   var court = document.createElementNS(xmlns,"image");
       court.href.baseVal = "img/uipic/court.png";
@@ -35,7 +35,7 @@ function starShootingChart(data){
       court.setAttributeNS(null,"width","500px");
       court.setAttributeNS(null,"height","362px");
       document.getElementsByClassName('svg_SSC')[0].appendChild(court);
-
+  svg.append("circle").attr("class","circleClass");//用于mouseover事件
   // 篮筐中心点(250,40);
   var dataset = getShotDetailData(data);
 
@@ -573,4 +573,8 @@ function SvgMouseover(distance){
 			.attr("y2",width-padding)
 			.attr('stroke-width', '1')
 			.attr("stroke","gray");
+	d3.selectAll(".circleClass")
+			.attr("cx",270)
+			.attr("cy",40)
+			.attr("r",9*distance);
 }
