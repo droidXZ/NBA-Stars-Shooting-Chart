@@ -171,7 +171,7 @@ function drawShotFreByDis(data) {
   var div = d3.select(".shotFreByDis");
   var width = div[0][0].offsetWidth;  //456
   var height = div[0][0].offsetHeight;  //400
-
+  SVG.append("line").attr("class","lineClass1");//用于Mouseover事件
   // 设置比例尺
   var xScale = d3.scale.linear()
           .domain([0,30])
@@ -280,7 +280,7 @@ function drawShotFGByDis(data){
   var yScale = d3.scale.linear()
           .domain([0,1])
           .range([padding,height - padding]);
-
+  SVG.append("line").attr("class","lineClass1");//用于Mouseover事件
   var linePath=d3.svg.line()//创建一个直线生成器
                       .x(function(d,i){
                         return xScale(i) - padding;
@@ -423,24 +423,27 @@ function getGoalByDistance(data){
  * 绘制左右对比的投篮频率图
  */
 function drawShotFreLR(data){
-	var top = 5;
-	var bottom = 85;
-	var left = 5;
-	var right = 85;
-	var mid = (left+right)/2;
-	var div = (bottom - top)/31;
+	var padding = 50;
+	var divSvg = d3.select(".shotFreLeftVsRight");
+    var width = divSvg[0][0].offsetWidth;  //456
+    var height = divSvg[0][0].offsetHeight;  //400
+    
+	var mid = width/2;
+	var div = (height-2*padding)/31;
 	var svg = d3.select(".shotFreLeftVsRight")
 				.append("svg")
 				.attr("width","100%")
 				.attr("height","100%");
 	drawCoordinate(svg,".shotFreLeftVsRight");
 	svg.append("line")
-			.attr("x1",mid+"%")
-			.attr("y1",top+"%")
-			.attr("x2",mid+"%")
-			.attr("y2",bottom+"%")
+			.attr("x1",mid)
+			.attr("y1",padding)
+			.attr("x2",mid)
+			.attr("y2",height-padding)
 			.attr('stroke-width', '1')
 			.attr("stroke","gray");
+	svg.append("line").attr("class","lineClass2");
+	svg.append("line").attr("class","lineClass");
 	var dataset = getGoalByDistance(data);
 	var maxShot = 0;
 	var shotData = [];
@@ -451,8 +454,8 @@ function drawShotFreLR(data){
 		if(maxShot<dataset[i].shot_right) maxShot = dataset[i].shot_right;
 	}
 	var divW;
-	if(maxShot<100) divW = (right-mid)/100;
-	else divW = (right-mid)/maxShot;
+	if(maxShot<100) divW = (mid-padding)/100;
+	else divW = (mid-padding)/maxShot;
 
 	svg.selectAll("rect")
 			.data(shotData)
@@ -462,13 +465,13 @@ function drawShotFreLR(data){
 				if(i % 2 === 0) return "#0f0";
 				else return "#00f";})
 		    .attr("x", function(d,i){
-		    	if(i%2 === 0)return (mid-divW*shotData[i]).toString()+"%";
-		    	else return mid+"%";})
+		    	if(i%2 === 0)return mid-divW*shotData[i];
+		    	else return mid;})
 			.attr("y", function(d,i) {
-				if(i%2 === 0) return (bottom-div*(i/2+1)).toString()+"%";
-				else return (bottom-div*((i-1)/2+1)).toString()+"%";})
-			.attr("width", function(d,i) {return (divW*shotData[i]).toString()+"%";})
-			.attr("height",div+"%")
+				if(i%2 === 0) return height-padding-div*(i/2+1);
+				else return height-padding-div*((i-1)/2+1);})
+			.attr("width", function(d,i) {return divW*shotData[i];})
+			.attr("height",div)
 			.on("mouseover",function(data,index){
 				LeftVsRightMouseover(index);
 			})
@@ -482,31 +485,32 @@ function drawShotFreLR(data){
  * 绘制左右对比的命中率图
  */
 function drawFieldGoalLR(data){
-	var top = 5;
-	var bottom = 85;
-	var left = 5;
-	var right = 85;
-	var mid = (left+right)/2;
-	var div = (bottom - top)/31;
+	var padding = 50;
+	var divSvg = d3.select(".shotFreLeftVsRight");
+    var width = divSvg[0][0].offsetWidth;  //456
+    var height = divSvg[0][0].offsetHeight;  //400
+	var mid = width/2;
+	var div = (height-2*padding)/31;
 	var svg = d3.select(".shotFGLeftVsRight")
 				.append("svg")
 				.attr("width","100%")
 				.attr("height","100%");
 	drawCoordinate(svg,".shotFGLeftVsRight");
 	svg.append("line")
-			.attr("x1",mid+"%")
-			.attr("y1",top+"%")
-			.attr("x2",mid+"%")
-			.attr("y2",bottom+"%")
+			.attr("x1",mid)
+			.attr("y1",padding)
+			.attr("x2",mid)
+			.attr("y2",height-padding)
 			.attr('stroke-width', '1')
 			.attr("stroke","gray");
+	svg.append("line").attr("class","lineClass2");
 	var dataset = getGoalByDistance(data);
 	var shotData = [];
 	for(i=0;i<=30;i++){
 		shotData.push(dataset[i].goal_left/dataset[i].shot_left);
 		shotData.push(dataset[i].goal_right/dataset[i].shot_right);
 	}
-	var divW = (right - mid)/100;
+	var divW = (mid-padding)/100;
 	svg.selectAll("rect")
 			.data(shotData)
 			.enter()
@@ -515,13 +519,13 @@ function drawFieldGoalLR(data){
 				if(i % 2 === 0) return "#0f0";
 				else return "#00f";})
 		    .attr("x", function(d,i){
-		    	if(i%2 === 0)return (mid-divW*shotData[i]*100).toString()+"%";
-		    	else return mid+"%";})
+		    	if(i%2 === 0)return mid-divW*shotData[i]*100;
+		    	else return mid;})
 			.attr("y", function(d,i) {
-				if(i%2 === 0) return (bottom-div*(i/2+1)).toString()+"%";
-				else return (bottom-div*((i-1)/2+1)).toString()+"%";})
-			.attr("width", function(d,i) {return (divW*shotData[i]*100).toString()+"%";})
-			.attr("height",div+"%")
+				if(i%2 === 0) return height-padding-div*(i/2+1);
+				else return height-padding-div*((i-1)/2+1);})
+			.attr("width", function(d,i) {return divW*shotData[i]*100;})
+			.attr("height",div)
 			.on("mouseover",function(data,index){
 				LeftVsRightMouseover(index);
 			})
@@ -546,4 +550,27 @@ function LeftVsRightMouseover(index){
 		else if(i%2==0) return "#0f0";
 		else return "#00f";
 	});
+	SvgMouseover(Math.floor(index/2));
+}
+function SvgMouseover(distance){
+	var padding = 50;
+	var divSvg = d3.select(".shotFreLeftVsRight");
+    var width = divSvg[0][0].offsetWidth;  //456
+    var height = divSvg[0][0].offsetHeight;  //400
+    var divH = (height-2*padding)/31; 
+    var divW = (width-2*padding)/31; 
+    d3.selectAll(".lineClass2")
+            .attr("x1",padding)
+			.attr("y1",height-padding-divH*distance)
+			.attr("x2",width-padding)
+			.attr("y2",height-padding-divH*distance)
+			.attr('stroke-width', '1')
+			.attr("stroke","gray");
+	d3.selectAll(".lineClass1")
+            .attr("x1",padding+divW*distance)
+			.attr("y1",padding)
+			.attr("x2",padding+divW*distance)
+			.attr("y2",width-padding)
+			.attr('stroke-width', '1')
+			.attr("stroke","gray");
 }
