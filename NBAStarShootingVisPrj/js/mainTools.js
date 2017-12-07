@@ -655,5 +655,8 @@ function SvgMouseover(distance){
 	d3.selectAll(".circleClass")
 			.attr("cx",270)
 			.attr("cy",40)
-			.attr("r",9*distance);
+			.attr("r",9*distance)
+      .attr("fill","none")
+      .attr("stroke","black")
+      .attr("stroke-width",5);
 }
