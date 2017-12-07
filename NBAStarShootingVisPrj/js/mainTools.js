@@ -3,7 +3,7 @@ d3.json("json/16-17season.json",function(d){
 
   	console.log(d.resultSets[0].headers);
     starShootingChart(d);
-    
+
     var data = getData(d,currentStarId);
 
   	drawShotFreByDis(getShotFreData(data));
@@ -16,7 +16,7 @@ d3.json("json/16-17season.json",function(d){
 
 function starShootingChart(data){
   // svg固定宽高
-  var width = 520,height = 450;
+  var width = 500,height = 450;
   var xmlns = "http://www.w3.org/2000/svg";
   var version = 1.1;
   var svg = d3.selectAll('.starShootingChart')
@@ -26,11 +26,11 @@ function starShootingChart(data){
               .attr("height",height)
               .attr("version",version)
               .attr("xmlns",xmlns);
-  
+
   //通过创建 xmlns向svg添加image图像
   var court = document.createElementNS(xmlns,"image");
       court.href.baseVal = "img/uipic/court.png";
-      court.setAttributeNS(null,"x",20);
+      court.setAttributeNS(null,"x",0);
       court.setAttributeNS(null,"y",0);
       court.setAttributeNS(null,"width","500px");
       court.setAttributeNS(null,"height","362px");
@@ -90,9 +90,9 @@ function starShootingChart(data){
     .attr("height",8)
     .attr("fill",function(d){
       if(d.action_type === 0){
-        return "#66fff6";
+        return "rgba(250, 60, 0, 0.6)";
       }else {
-        return "#F40000";
+        return "rgba(9, 246, 32, 0.6)";
       }
     })
     .on("mouseover",function(d){
@@ -179,7 +179,7 @@ function drawShotFreByDis(data) {
   var yScale = d3.scale.linear()
           .domain([0,0.25])
           .range([padding,height]);
-  
+
   var linePath=d3.svg.line()//创建一个直线生成器
                       .x(function(d,i){
                         return xScale(i) - padding;
@@ -196,7 +196,7 @@ function drawShotFreByDis(data) {
     .append("path")
     .attr("transform","translate("+padding+","+padding+")")
     .attr("d",function(d){
-      return linePath(d.Fre);//返回线段生成器得到的路径  
+      return linePath(d.Fre);//返回线段生成器得到的路径
     })
     .attr("fill","none")
     .attr("stroke-width",3)
@@ -224,7 +224,7 @@ var circles = SVG.selectAll("circle")
                   .append("div")
                   .attr("class","tooltip")
                   .style("opacity",0.0);
-                  
+
   circles.on("mouseover",function(d){
             /*
             鼠标移入时，
@@ -331,7 +331,7 @@ function drawShotFGByDis(data){
     .append("path")
     .attr("transform","translate("+padding+","+padding+")")
     .attr("d",function(d){
-      return linePath(d.FG);//返回线段生成器得到的路径  
+      return linePath(d.FG);//返回线段生成器得到的路径
     })
     .attr("fill","none")
     .attr("stroke-width",3)
@@ -358,7 +358,7 @@ function drawShotFGByDis(data){
                   .append("div")
                   .attr("class","tooltip")
                   .style("opacity",0.0);
-                  
+
   circles.on("mouseover",function(d){
       /*
       鼠标移入时，
@@ -398,7 +398,7 @@ function drawCoordinate(SVG,className,xMax,yMax){
   var width = div[0][0].offsetWidth;  //456
   var height = div[0][0].offsetHeight;  //400
   var padding = 50;
-  
+
   // 设置比例尺
   xScale = d3.scale.linear()
           .domain([0,xMax])
@@ -415,9 +415,9 @@ function drawCoordinate(SVG,className,xMax,yMax){
         .scale(yScale)
         .orient("left")
         .ticks(5);
-  
+
   SVG.append("g")
-      .attr("class","axis")  
+      .attr("class","axis")
       .attr("transform","translate(" + padding +"," + (height - padding) + ")")
       .call(xAxis);
 
@@ -497,7 +497,7 @@ function drawShotFreLR(data){
 	var divSvg = d3.select(".shotFreLeftVsRight");
     var width = divSvg[0][0].offsetWidth;  //456
     var height = divSvg[0][0].offsetHeight;  //400
-    
+
 	var mid = width/2;
 	var div = (height-2*padding)/31;
 	var svg = d3.select(".shotFreLeftVsRight")
@@ -600,7 +600,7 @@ function drawFieldGoalLR(data){
 				else return height-padding-div*((i-1)/2+1);})
 			.attr("width", function(d,i) {return divW*shotData[i]*100;})
 			.attr("height",div)
-			
+
 	svg.on("mousemove",function(){
 		var x = d3.event.offsetX;
 		var y = d3.event.offsetY;
@@ -636,8 +636,8 @@ function SvgMouseover(distance){
 	var divSvg = d3.select(".shotFreLeftVsRight");
     var width = divSvg[0][0].offsetWidth;  //456
     var height = divSvg[0][0].offsetHeight;  //400
-    var divH = (height-2*padding)/31; 
-    var divW = (width-2*padding)/31; 
+    var divH = (height-2*padding)/31;
+    var divW = (width-2*padding)/30;
     d3.selectAll(".lineClass2")
             .attr("x1",padding)
 			.attr("y1",height-padding-divH*distance)
@@ -653,10 +653,10 @@ function SvgMouseover(distance){
 			.attr('stroke-width', '1')
 			.attr("stroke","gray");
 	d3.selectAll(".circleClass")
-			.attr("cx",270)
-			.attr("cy",40)
-			.attr("r",9*distance)
+			.attr("cx",250)
+			.attr("cy",48.5)
+			.attr("r",10*distance)
       .attr("fill","none")
-      .attr("stroke","black")
+      .attr("stroke","#c3c1c8")
       .attr("stroke-width",5);
 }
