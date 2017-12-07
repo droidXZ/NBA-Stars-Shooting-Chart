@@ -286,7 +286,9 @@
   /*background-color: #FF6666;*/
 }
 
-
+.svg_SSC {
+  margin-left: 20px;
+}
 /* 右部 绘制区域 */
 /*.warper_right .theDigDraw{
   width: 100%;
@@ -356,7 +358,7 @@
     font-family: simsun;
     font-size: 14px;
     text-align: center;
-    border-style: solid; 
+    border-style: solid;
     border-width: 1px;
     background-color: white;
     border-radius: 5px;
