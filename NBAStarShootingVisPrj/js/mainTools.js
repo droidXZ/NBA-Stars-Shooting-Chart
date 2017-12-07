@@ -206,18 +206,18 @@ function drawShotFreByDis(data) {
   console.log(data[0]);
   console.log(dataset);
   //绘制散点
-var circles = SVG.selectAll("circle")
-      .data(dataset)
-      .enter()
-      .append("circle")
-      .attr("r",5)
-      .attr("cx",function(d,i){
-        return xScale(i);
-      })
-      .attr("cy",function(d,i){
-        return height - yScale(d);
-      })
-      .attr("fill","transparent");
+  var circles = SVG.selectAll("circle")
+                    .data(dataset)
+                    .enter()
+                    .append("circle")
+                    .attr("r",5)
+                    .attr("cx",function(d,i){
+                      return xScale(i);
+                    })
+                    .attr("cy",function(d,i){
+                      return height - yScale(d);
+                    })
+                    .attr("fill","transparent");
 
   //添加一个提示框
   var tooltip = d3.select("body")
@@ -241,18 +241,18 @@ var circles = SVG.selectAll("circle")
             d3.select(this).attr("fill","Salmon")
                             .attr("stroke","DarkTurquoise")
                             .attr("stroke-width",3);
-          })
-          .on("mousemove",function(d){
-            /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
-            tooltip.style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY + 20) + "px");
-          })
-          .on("mouseout",function(d){
-            /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
-            tooltip.style("opacity",0.0);
-            d3.select(this).attr("fill","transparent")
-            .attr("stroke","none");
-          });
+                            })
+                            .on("mousemove",function(d){
+                              /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
+                              tooltip.style("left", (d3.event.pageX) + "px")
+                              .style("top", (d3.event.pageY + 20) + "px");
+                            })
+                            .on("mouseout",function(d){
+                              /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+                              tooltip.style("opacity",0.0);
+                              d3.select(this).attr("fill","transparent")
+                              .attr("stroke","none");
+                            });
 
   //绘制坐标轴
 	drawCoordinate(SVG,".shotFreByDis",30,0.25);
@@ -260,7 +260,6 @@ var circles = SVG.selectAll("circle")
 
 // 返回球员投篮命中率数据
 function getShotFGData(data) {
-
   //出手次数
   var shotTimes = new Array(31);
   //命中次数
@@ -296,7 +295,6 @@ function getShotFGData(data) {
 
 //绘制球员各距离命中率图像
 function drawShotFGByDis(data){
-
   //获取当前DOM宽高
   var div = d3.select(".shotFGByDis");
   var width = div[0][0].offsetWidth;  //456
@@ -374,19 +372,40 @@ function drawShotFGByDis(data){
       d3.select(this).attr("fill","Salmon")
                       .attr("stroke","DarkTurquoise")
                       .attr("stroke-width",3);
+        //选中点 X 坐标 
+        //d3.select(this)[0][0].cx.animVal.value
+        
+        var x = d3.select(this)[0][0].cx.animVal.value;
+        d3.selectAll(".lineClass1")
+                  .attr("x1",x)
+                  .attr("y1",height-padding)
+                  .attr("x2",x)
+                  .attr("y2",padding)
+                  .attr('stroke-width', '1')
+                  .attr("stroke","gray");
+      })
+      .on("mousemove",function(d){  
+        /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
+        tooltip.style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY + 20) + "px");
+      })
+      .on("mouseout",function(d){
+        /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+        tooltip.style("opacity",0.0);
+        d3.select(this).attr("fill","transparent")
+                        .attr("stroke","none");
+        });
+    SVG.on("mousemove",function(){
+      var x = d3.event.offsetX;
+      var y = d3.event.offsetY;
+      if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
+        var div = (width-2*padding)/31;
+        LeftVsRightMouseover(Math.floor((x-padding)*2/div));
+        }
+      else{
+        LeftVsRightMouseover(-1);
+      }
     })
-  .on("mousemove",function(d){
-    /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
-    tooltip.style("left", (d3.event.pageX) + "px")
-    .style("top", (d3.event.pageY + 20) + "px");
-  })
-  .on("mouseout",function(d){
-    /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
-    tooltip.style("opacity",0.0);
-    d3.select(this).attr("fill","transparent")
-    .attr("stroke","none");
-  });
-
   //绘制坐标轴
   drawCoordinate(SVG,'.shotFGByDis',30,1);
 }
@@ -569,7 +588,7 @@ function drawFieldGoalLR(data){
 				.append("svg")
 				.attr("width","100%")
 				.attr("height","100%");
-	drawCoordinate(svg,".shotFGLeftVsRight");
+	drawCoordinate(svg,".shotFGLeftVsRight",100,30);
 	svg.append("line")
 			.attr("x1",mid)
 			.attr("y1",padding)
@@ -636,24 +655,24 @@ function SvgMouseover(distance){
 	var divSvg = d3.select(".shotFreLeftVsRight");
     var width = divSvg[0][0].offsetWidth;  //456
     var height = divSvg[0][0].offsetHeight;  //400
-    var divH = (height-2*padding)/31; 
-    var divW = (width-2*padding)/31; 
+    var divH = (height-2*padding)/31;
+    var divW = (width-2*padding)/30; 
     d3.selectAll(".lineClass2")
-            .attr("x1",padding)
+      .attr("x1",padding)
 			.attr("y1",height-padding-divH*distance)
 			.attr("x2",width-padding)
 			.attr("y2",height-padding-divH*distance)
 			.attr('stroke-width', '1')
 			.attr("stroke","gray");
 	d3.selectAll(".lineClass1")
-            .attr("x1",padding+divW*distance)
+      .attr("x1",padding+divW*distance)
 			.attr("y1",padding)
 			.attr("x2",padding+divW*distance)
-			.attr("y2",width-padding)
+			.attr("y2",height-padding)
 			.attr('stroke-width', '1')
 			.attr("stroke","gray");
 	d3.selectAll(".circleClass")
-			.attr("cx",270)
+			.attr("cx",265)
 			.attr("cy",40)
 			.attr("r",9*distance)
       .attr("fill","none")
