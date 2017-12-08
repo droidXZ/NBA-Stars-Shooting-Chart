@@ -196,7 +196,7 @@ function drawShotFreByDis(data) {
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY + 20) + "px")
             .style("opacity",1.0);
-           
+
             //选中状态
             d3.select(this).attr("fill","Salmon")
                             .attr("stroke","DarkTurquoise")
@@ -347,7 +347,6 @@ function drawShotFGByDis(data){
                       .attr("stroke-width",3);
         //选中点 X 坐标
         //d3.select(this)[0][0].cx.animVal.value
-<<<<<<< HEAD
 
         var x = d3.select(this)[0][0].cx.animVal.value;
         d3.selectAll(".lineClass1")
@@ -357,9 +356,6 @@ function drawShotFGByDis(data){
                   .attr("y2",padding)
                   .attr('stroke-width', '1')
                   .attr("stroke","gray");
-=======
-        
->>>>>>> 74b05fa891ce56444aa503934bae69b17724f40a
       })
       .on("mousemove",function(d){
         /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
@@ -408,7 +404,7 @@ function drawShotFGByDis(data){
 
 //绘制折线图
 function drawLineChart(SVG,data,dataName,xScale,yScale){
-  
+
   var padding = 50;
   var height = 400;
 
@@ -489,7 +485,7 @@ function drawTitle(SVG,title){
       .attr("x",padding)
       .attr("y",padding/2)
       .attr("font-size",18)
-      .attr("font-family","幼圆")
+      .attr("font-family","微软雅黑")
       .text(title);
 }
 
