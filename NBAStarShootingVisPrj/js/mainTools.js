@@ -309,22 +309,6 @@ function drawShotFGByDis(data){
                     })
                     .attr("fill","transparent");
 
-  var lines = SVG.selectAll("line")
-                  .data(dataset)
-                  .enter()
-                  .append("line")
-                  .attr("x1",function(d,i){
-                    return xScale(i);
-                  })
-                  .attr("y1",padding)
-                  .attr("x2",function(d,i){
-                    return xScale(i);
-                  })
-                  .attr("y2",height - padding)
-                  .attr('stroke-width', 10)
-                  .attr("stroke","transparent")
-                  .attr("opacity",0.5);
-
   //添加一个提示框
   var tooltip = d3.select("body")
                   .append("div")
@@ -370,30 +354,26 @@ function drawShotFGByDis(data){
                         .attr("stroke","none");
         });
 
-    lines.on("mouseover",function(d,i){
-      tooltip.html("distance: " + i + "<br/>" + "FG%: " + Math.round(d*100) + "%")
-              .style("left", (d3.event.pageX) + "px")
-              .style("top", (d3.event.pageY + 20) + "px")
-              .style("opacity",0.8);
-       // d3.select(this).attr("stroke","gray");
-    })
-    .on("mouseout",function(d){
-        /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
-        tooltip.style("opacity",0.0);
-    });
-
-    SVG.on("mousemove",function(){
+    SVG.on("mousemove",function(d,i){
       var x = d3.event.offsetX;
       var y = d3.event.offsetY;
+
       if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
         //每一块的长度
         var div = (width-2*padding)/31;
+
+        var index = (x-padding)*2/div;
+
+        showTooltip((x-padding)*2/div,tooltip);
         showCurSelected(Math.floor((x-padding)*2/div));
         LeftVsRightMouseover(Math.floor((x-padding)*2/div));
         }
       else{
         showCurSelected(0);
       }
+    })
+    .on("mouseout",function(){
+      tooltip.style("opacity",0.0);
     });
 
   //绘制标题
@@ -493,6 +473,13 @@ function drawTitle(SVG,title){
 
 //显示当前选中
 function showCurSelected(index){
+
+  //添加一个提示框
+  var tooltip = d3.select("body")
+                  .append("div")
+                  .attr("class","tooltip")
+                  .style("opacity",0.0);
+  
   d3.select(".shotFGByDis")
     .selectAll("circle")
     .attr("fill",function(d,i){
@@ -504,7 +491,8 @@ function showCurSelected(index){
       else return "transparent";
     })
     .attr("stroke-width",3);
-    d3.select(".shotFreByDis")
+
+  d3.select(".shotFreByDis")
     .selectAll("circle")
     .attr("fill",function(d,i){
       if(index/2 >= i && index/2 < i + 1) return "Salmon";
@@ -516,11 +504,22 @@ function showCurSelected(index){
     })
     .attr("stroke-width",3);
 
-     // tooltip.html("distance: " + i + "<br/>" + "Fre%: " + Math.round(100) + "%")
-     //        .style("left", (800) + "px")
-     //        .style("top", (100) + "px")
-     //        .style("opacity",1.0);
+
   SvgMouseover(Math.floor(index/2));
+}
+
+function showTooltip(index,tooltip){
+
+  d3.select(".shotFGByDis")
+    .selectAll("circle")
+    .attr("",function(d,i){
+      if(index/2 >= i && index/2 < i + 1){
+        tooltip.html("distance: " + i + "<br/>" + "FG%: " + Math.round(d*100) + "%")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY + 20) + "px")
+                .style("opacity",0.8);
+      }
+    })
 }
 
 /**********************************************************************************************/
