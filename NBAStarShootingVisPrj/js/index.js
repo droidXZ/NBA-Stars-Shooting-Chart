@@ -3,17 +3,11 @@
   // 当前默认的球星和球星Id 检索可通过名称 绘制均通过Id进行查找数据
   var currentStar = "Russell Westbrook",
       currentStarId = 201566;
-
+  bindSerachImg();
   document.getElementsByClassName('buttonBox')[0].onclick = function(){
     document.getElementsByClassName('selectPlayer')[0].style.display = 'block';
-    bindSerachImg();
+
     //通过点击图片更改当前currentId
-    // var starPics = document.getElementsByClassName('starPicSelect');
-    // for(var i in starPics){
-    //   starPics[i].onclick = function(i){
-    //     alert(i);
-    //   }
-    // }
     d3.selectAll(".starPicSelect")
       .on("click",function(d){
         alert(d3.select(this));
@@ -23,15 +17,35 @@
         var idStr = cDiv[0][0].firstChild.getAttribute("src"),
             nameStr = cDiv[0][0].lastChild.innerHTML;
         idStr = idStr.slice(11);
-        idStr = idStr.substr(0,idStr.indexOf('.'))
+        idStr = idStr.substr(0,idStr.indexOf('.'));
 
         changeCurrentStar(idStr,nameStr);
+        //点击切换球星后 隐藏选择框
+
+        document.getElementsByClassName('selectPlayer')[0].style.display = 'none';
+        resetSerachPic();
       });
-    // console.log(starPics);
+    // 点击搜索 进行搜索
+    document.getElementById("serachButton").onclick = function(){
+      var serachStr = document.getElementById("inputV").value.toLowerCase();
+      var cDivBox = document.getElementsByClassName("starPicSelect");
+      for(var i in cDivBox){
+        var idStr = cDivBox[i].firstChild.getAttribute("src"),
+            nameStr = cDivBox[i].lastChild.innerHTML;
+        idStr = idStr.slice(11);
+        idStr = idStr.substr(0,idStr.indexOf('.'));
+        if(serachStr == nameStr.toLowerCase() || serachStr == idStr){
+          continue;
+        }else {
+          cDivBox[i].style.display = "none";
+        }
+      }
+    }
   }
 
   document.getElementById('hideButton').onclick = function(){
     document.getElementsByClassName('selectPlayer')[0].style.display = 'none';
+    resetSerachPic();
 }
 
 
@@ -56,6 +70,15 @@
    });
  }
 
+  // 重置选择球星框盒子元素
+  function resetSerachPic(){
+    var cDivBox = document.getElementsByClassName("starPicSelect");
+    for(var i in cDivBox){
+        cDivBox[i].style.display = "block";
+    }
+  }
+
+  //改变当前球星id和球星名称
   function changeCurrentStar(idStr,nameStr){
     currentStar = nameStr;
     currentStarId = Number(idStr);

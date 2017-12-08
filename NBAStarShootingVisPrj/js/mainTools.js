@@ -71,9 +71,9 @@ function starShootingChart(data){
     .attr("height",8)
     .attr("fill",function(d){
       if(d.action_type === 0){
-        return "rgba(250, 60, 0, 0.6)";
+        return "rgba(83, 87, 161, 1)";
       }else {
-        return "rgba(9, 246, 32, 0.6)";
+        return "rgba(173, 42, 71, 1)";
       }
     })
     .on("click",function(d){
