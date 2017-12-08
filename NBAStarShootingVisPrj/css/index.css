@@ -179,7 +179,7 @@
 .warper .warper_left{
   position: absolute;
   width: 40%;
-  min-width: 600px;
+  min-width: 640px;
   top: 0;
   left: 0;
 }

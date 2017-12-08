@@ -90,9 +90,9 @@ function starShootingChart(data){
     .attr("height",8)
     .attr("fill",function(d){
       if(d.action_type === 0){
-        return "rgba(250, 60, 0, 0.6)";
+        return "rgba(83, 87, 161, 1)";
       }else {
-        return "rgba(9, 246, 32, 0.6)";
+        return "rgba(173, 42, 71, 1)";
       }
     })
     .on("mouseover",function(d){
@@ -372,9 +372,9 @@ function drawShotFGByDis(data){
       d3.select(this).attr("fill","Salmon")
                       .attr("stroke","DarkTurquoise")
                       .attr("stroke-width",3);
-        //选中点 X 坐标 
+        //选中点 X 坐标
         //d3.select(this)[0][0].cx.animVal.value
-        
+
         var x = d3.select(this)[0][0].cx.animVal.value;
         d3.selectAll(".lineClass1")
                   .attr("x1",x)
@@ -384,7 +384,7 @@ function drawShotFGByDis(data){
                   .attr('stroke-width', '1')
                   .attr("stroke","gray");
       })
-      .on("mousemove",function(d){  
+      .on("mousemove",function(d){
         /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
         tooltip.style("left", (d3.event.pageX) + "px")
               .style("top", (d3.event.pageY + 20) + "px");
