@@ -254,6 +254,21 @@ function drawShotFreByDis(data) {
                               .attr("stroke","none");
                             });
 
+            SVG.on("mousemove",function(){
+              var x = d3.event.offsetX;
+              var y = d3.event.offsetY;
+              if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
+                //每一块的长度
+                var div = (width-2*padding)/31;
+                LeftVsRightMouseover(Math.floor((x-padding)*2/div));
+                }
+              else{
+                LeftVsRightMouseover(-1);
+              }
+            })
+
+  //绘制标题
+  drawTitle(SVG,"Shot Frequency % by Distance");
   //绘制坐标轴
 	drawCoordinate(SVG,".shotFreByDis",30,0.25);
 }
@@ -365,9 +380,9 @@ function drawShotFGByDis(data){
       （3）设定提示框的透明度为1.0（完全不透明）
       */
       tooltip.html(Math.round(d*100) + "%")
-      .style("left", (d3.event.pageX) + "px")
-      .style("top", (d3.event.pageY + 20) + "px")
-      .style("opacity",1.0);
+              .style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY + 20) + "px")
+              .style("opacity",1.0);
       //选中状态
       d3.select(this).attr("fill","Salmon")
                       .attr("stroke","DarkTurquoise")
@@ -375,19 +390,19 @@ function drawShotFGByDis(data){
         //选中点 X 坐标 
         //d3.select(this)[0][0].cx.animVal.value
         
-        var x = d3.select(this)[0][0].cx.animVal.value;
-        d3.selectAll(".lineClass1")
-                  .attr("x1",x)
-                  .attr("y1",height-padding)
-                  .attr("x2",x)
-                  .attr("y2",padding)
-                  .attr('stroke-width', '1')
-                  .attr("stroke","gray");
+        // var x = d3.select(this)[0][0].cx.animVal.value;
+        // d3.selectAll(".lineClass1")
+        //           .attr("x1",x)
+        //           .attr("y1",height-padding)
+        //           .attr("x2",x)
+        //           .attr("y2",padding)
+        //           .attr('stroke-width', '1')
+        //           .attr("stroke","gray");
       })
-      .on("mousemove",function(d){  
+      .on("mousemove",function(d){
         /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
         tooltip.style("left", (d3.event.pageX) + "px")
-              .style("top", (d3.event.pageY + 20) + "px");
+                .style("top", (d3.event.pageY + 20) + "px");
       })
       .on("mouseout",function(d){
         /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
@@ -395,10 +410,12 @@ function drawShotFGByDis(data){
         d3.select(this).attr("fill","transparent")
                         .attr("stroke","none");
         });
+
     SVG.on("mousemove",function(){
       var x = d3.event.offsetX;
       var y = d3.event.offsetY;
       if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
+        //每一块的长度
         var div = (width-2*padding)/31;
         LeftVsRightMouseover(Math.floor((x-padding)*2/div));
         }
@@ -406,6 +423,9 @@ function drawShotFGByDis(data){
         LeftVsRightMouseover(-1);
       }
     })
+
+  //绘制标题
+  drawTitle(SVG,"Field Goal % by Distance");
   //绘制坐标轴
   drawCoordinate(SVG,'.shotFGByDis',30,1);
 }
@@ -456,6 +476,17 @@ function getData(data,player_id){
     }
   }
   return dataset;
+}
+
+function drawTitle(SVG,title){
+  var padding = 50;
+
+  SVG.append("text")
+      .attr("x",padding)
+      .attr("y",padding/2)
+      .attr("font-size",18)
+      .attr("font-family","幼圆")
+      .text(title);
 }
 
 /**
@@ -523,6 +554,9 @@ function drawShotFreLR(data){
 				.append("svg")
 				.attr("width","100%")
 				.attr("height","100%");
+  //绘制标题
+  drawTitle(svg,"Shot Frequency:Left Side vs. Right Side");
+  //绘制坐标轴
 	drawCoordinate(svg,".shotFreLeftVsRight");
 	svg.append("line")
 			.attr("x1",mid)
@@ -588,7 +622,10 @@ function drawFieldGoalLR(data){
 				.append("svg")
 				.attr("width","100%")
 				.attr("height","100%");
-	drawCoordinate(svg,".shotFGLeftVsRight",100,30);
+  //绘制标题
+  drawTitle(svg,"Field Goal%:Left Side vs. Right Side");
+  //绘制坐标轴
+	drawCoordinate(svg,".shotFGLeftVsRight",1,30);
 	svg.append("line")
 			.attr("x1",mid)
 			.attr("y1",padding)
