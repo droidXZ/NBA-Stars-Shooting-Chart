@@ -282,11 +282,15 @@
   width: 100%;
   min-width: 520px;
   height: 450px;
-  margin-top: 30px;
-  /*background-color: #FF6666;*/
+  margin-top: 20px;
+}
+
+.starShootingChart p {
+  margin-left: 80px;
 }
 
 .svg_SSC {
+  margin-top: 10px;
   margin-left: 60px;
 }
 /* 右部 绘制区域 */
@@ -365,13 +369,13 @@
   }
 
   .axis {
-    fill: none;  
-    stroke: black;  
-    shape-rendering: crispEdges;  
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
   }
 
   .axis text {
     fill: black;
     font-family: sans-serif;
-    font-size: 15px;  
+    font-size: 15px;
   }

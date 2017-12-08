@@ -34,7 +34,6 @@ function starShootingChart(data){
       court.setAttributeNS(null,"width","500px");
       court.setAttributeNS(null,"height","362px");
       document.getElementsByClassName('svg_SSC')[0].appendChild(court);
-  svg.append("circle").attr("class","circleClass");//用于mouseover事件
   // 篮筐中心点(250,40);
   var dataset = getShotDetailData(data);
 
@@ -87,6 +86,8 @@ function starShootingChart(data){
         .attr("stroke-width",0)
         .attr("stroke","rgba(255,255,255,0)");
     });
+
+    svg.append("circle").attr("class","circleClass");//用于mouseover事件
 }
 
 //获取球员投篮命中与否 距离 位置。
@@ -479,7 +480,7 @@ function showCurSelected(index){
                   .append("div")
                   .attr("class","tooltip")
                   .style("opacity",0.0);
-  
+
   d3.select(".shotFGByDis")
     .selectAll("circle")
     .attr("fill",function(d,i){
@@ -620,8 +621,8 @@ function drawShotFreLR(data){
 			.enter()
 			.append("rect")
 			.attr("fill", function(d,i){
-				if(i % 2 === 0) return "#0f0";
-				else return "#00f";})
+				if(i % 2 === 0) return "rgba(117, 205, 117, 0.6)";
+				else return "rgba(187, 139, 230, 0.6)";})
 		    .attr("x", function(d,i){
 		    	if(i%2 === 0)return mid-divW*shotData[i];
 		    	else return mid;})
@@ -682,8 +683,8 @@ function drawFieldGoalLR(data){
 			.enter()
 			.append("rect")
 			.attr("fill", function(d,i){
-				if(i % 2 === 0) return "#0f0";
-				else return "#00f";})
+				if(i % 2 === 0) return "rgba(117, 205, 117, 0.6)";
+				else return "rgba(187, 139, 230, 0.6)";})
 		    .attr("x", function(d,i){
 		    	if(i%2 === 0)return mid-divW*shotData[i]*100;
 		    	else return mid;})
@@ -713,14 +714,16 @@ function drawFieldGoalLR(data){
  */
 function LeftVsRightMouseover(index){
 	d3.select(".shotFreLeftVsRight").selectAll("rect").attr("fill",function(d,i){
-		if(Math.floor(index/2)===Math.floor(i/2))return "orange";
-		else if(i%2==0) return "#0f0";
-		else return "#00f";
+		if(Math.floor(index/2)===Math.floor(i/2) && i%2 == 0) return "rgba(117, 205, 117, 1)";
+    else if(Math.floor(index/2)===Math.floor(i/2) && i%2 == 1) return "rgba(187, 139, 230, 1)";
+		else if(i%2==0) return "rgba(117, 205, 117, 0.6)";
+		else return "rgba(187, 139, 230, 0.6)";
 	});
 	d3.select(".shotFGLeftVsRight").selectAll("rect").attr("fill",function(d,i){
-		if(Math.floor(index/2)===Math.floor(i/2))return "orange";
-		else if(i%2==0) return "#0f0";
-		else return "#00f";
+    if(Math.floor(index/2)===Math.floor(i/2) && i%2 == 0) return "rgba(117, 205, 117, 1)";
+    else if(Math.floor(index/2)===Math.floor(i/2) && i%2 == 1) return "rgba(187, 139, 230, 1)";
+		else if(i%2==0) return "rgba(117, 205, 117, 0.6)";
+		else return "rgba(187, 139, 230, 0.6)";
 	});
 
 	SvgMouseover(Math.floor(index/2));
