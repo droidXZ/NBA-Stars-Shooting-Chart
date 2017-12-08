@@ -351,7 +351,7 @@
   text-decoration: none;
 }
 
-.tooltip{
+.tooltip  {
     position: absolute;
     width: 120;
     height: auto;
@@ -362,4 +362,16 @@
     border-width: 1px;
     background-color: white;
     border-radius: 5px;
+  }
+
+  .axis {
+    fill: none;  
+    stroke: black;  
+    shape-rendering: crispEdges;  
+  }
+
+  .axis text {
+    fill: black;
+    font-family: sans-serif;
+    font-size: 15px;  
   }

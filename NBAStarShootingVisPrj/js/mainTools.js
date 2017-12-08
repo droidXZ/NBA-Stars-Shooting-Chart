@@ -11,7 +11,6 @@ d3.json("json/16-17season.json",function(d){
   	drawShotFreLR(data);
   	drawFieldGoalLR(data);
 
-  	//getGoalByDistance(getData(d,201565));
 });
 
 function starShootingChart(data){
@@ -164,31 +163,7 @@ function drawShotFreByDis(data) {
           .domain([0,0.25])
           .range([padding,height]);
 
-  var linePath=d3.svg.line()//创建一个直线生成器
-                      .x(function(d,i){
-                        return xScale(i) - padding;
-                      })
-                      .y(function(d){
-                        return height - yScale(d) - padding;
-                      })
-                      // .interpolate("basis");//插值模式
-
-  //绘制折线图
-  SVG.selectAll("path")
-    .data(data)
-    .enter()
-    .append("path")
-    .attr("transform","translate("+padding+","+padding+")")
-    .attr("d",function(d){
-      return linePath(d.Fre);//返回线段生成器得到的路径
-    })
-    .attr("fill","none")
-    .attr("stroke-width",3)
-    .attr("stroke","Salmon");
-
   var dataset = data[0].Fre;
-  console.log(data[0]);
-  console.log(dataset);
   //绘制散点
   var circles = SVG.selectAll("circle")
                     .data(dataset)
@@ -209,18 +184,19 @@ function drawShotFreByDis(data) {
                   .attr("class","tooltip")
                   .style("opacity",0.0);
 
-  circles.on("mouseover",function(d){
+  circles.on("mouseover",function(d,i){
             /*
             鼠标移入时，
             （1）通过 selection.html() 来更改提示框的文字
             （2）通过更改样式 left 和 top 来设定提示框的位置
             （3）设定提示框的透明度为1.0（完全不透明）
             */
-//          Math.round(d*Math.pow(10,2))/Math.pow(10,2)
-            tooltip.html(Math.round(d*100) + "%")
+
+            tooltip.html("distance: " + i + "<br/>" + "Fre%: " + Math.round(d*100) + "%")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY + 20) + "px")
             .style("opacity",1.0);
+           
             //选中状态
             d3.select(this).attr("fill","Salmon")
                             .attr("stroke","DarkTurquoise")
@@ -238,8 +214,25 @@ function drawShotFreByDis(data) {
                               .attr("stroke","none");
                             });
 
+            SVG.on("mousemove",function(){
+              var x = d3.event.offsetX;
+              var y = d3.event.offsetY;
+              if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
+                //每一段的长度
+                var div = (width-2*padding)/31;
+                LeftVsRightMouseover(Math.floor((x-padding)*2/div));
+                }
+              else{
+                LeftVsRightMouseover(0);
+              }
+            })
+
+  //绘制标题
+  drawTitle(SVG,"Shot Frequency % by Distance");
+  //绘制折线图
+  drawLineChart(SVG,data,"Fre",xScale,yScale);
   //绘制坐标轴
-	drawCoordinate(SVG,".shotFreByDis",30,0.25);
+	drawCoordinate(SVG,".shotFreByDis",30,25);
 }
 
 // 返回球员投篮命中率数据
@@ -298,26 +291,6 @@ function drawShotFGByDis(data){
           .domain([0,1])
           .range([padding,height - padding]);
   SVG.append("line").attr("class","lineClass1");//用于Mouseover事件
-  var linePath=d3.svg.line()//创建一个直线生成器
-                      .x(function(d,i){
-                        return xScale(i) - padding;
-                      })
-                      .y(function(d){
-                        return height - yScale(d) - padding;
-                      })
-                      // .interpolate("basis");//插值模式
-  //绘制折线图
-  SVG.selectAll("path")
-    .data(data)
-    .enter()
-    .append("path")
-    .attr("transform","translate("+padding+","+padding+")")
-    .attr("d",function(d){
-      return linePath(d.FG);//返回线段生成器得到的路径
-    })
-    .attr("fill","none")
-    .attr("stroke-width",3)
-    .attr("stroke","Salmon");
 
   var dataset = data[0].FG;
 
@@ -335,29 +308,46 @@ function drawShotFGByDis(data){
                     })
                     .attr("fill","transparent");
 
+  var lines = SVG.selectAll("line")
+                  .data(dataset)
+                  .enter()
+                  .append("line")
+                  .attr("x1",function(d,i){
+                    return xScale(i);
+                  })
+                  .attr("y1",padding)
+                  .attr("x2",function(d,i){
+                    return xScale(i);
+                  })
+                  .attr("y2",height - padding)
+                  .attr('stroke-width', 10)
+                  .attr("stroke","transparent")
+                  .attr("opacity",0.5);
+
   //添加一个提示框
   var tooltip = d3.select("body")
                   .append("div")
                   .attr("class","tooltip")
                   .style("opacity",0.0);
 
-  circles.on("mouseover",function(d){
+  circles.on("mouseover",function(d,i){
       /*
       鼠标移入时，
       （1）通过 selection.html() 来更改提示框的文字
       （2）通过更改样式 left 和 top 来设定提示框的位置
       （3）设定提示框的透明度为1.0（完全不透明）
       */
-      tooltip.html(Math.round(d*100) + "%")
-      .style("left", (d3.event.pageX) + "px")
-      .style("top", (d3.event.pageY + 20) + "px")
-      .style("opacity",1.0);
+      tooltip.html("distance: " + i + "<br/>" + "FG%: " + Math.round(d*100) + "%")
+              .style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY + 20) + "px")
+              .style("opacity",1.0);
       //选中状态
       d3.select(this).attr("fill","Salmon")
                       .attr("stroke","DarkTurquoise")
                       .attr("stroke-width",3);
         //选中点 X 坐标
         //d3.select(this)[0][0].cx.animVal.value
+<<<<<<< HEAD
 
         var x = d3.select(this)[0][0].cx.animVal.value;
         d3.selectAll(".lineClass1")
@@ -367,11 +357,14 @@ function drawShotFGByDis(data){
                   .attr("y2",padding)
                   .attr('stroke-width', '1')
                   .attr("stroke","gray");
+=======
+        
+>>>>>>> 74b05fa891ce56444aa503934bae69b17724f40a
       })
       .on("mousemove",function(d){
         /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
         tooltip.style("left", (d3.event.pageX) + "px")
-              .style("top", (d3.event.pageY + 20) + "px");
+                .style("top", (d3.event.pageY + 20) + "px");
       })
       .on("mouseout",function(d){
         /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
@@ -379,19 +372,65 @@ function drawShotFGByDis(data){
         d3.select(this).attr("fill","transparent")
                         .attr("stroke","none");
         });
+
+    lines.on("mouseover",function(d,i){
+      tooltip.html("distance: " + i + "<br/>" + "FG%: " + Math.round(d*100) + "%")
+              .style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY + 20) + "px")
+              .style("opacity",0.8);
+       // d3.select(this).attr("stroke","gray");
+    })
+    .on("mouseout",function(d){
+        /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+        tooltip.style("opacity",0.0);
+    });
+
     SVG.on("mousemove",function(){
       var x = d3.event.offsetX;
       var y = d3.event.offsetY;
       if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
+        //每一块的长度
         var div = (width-2*padding)/31;
         LeftVsRightMouseover(Math.floor((x-padding)*2/div));
         }
       else{
-        LeftVsRightMouseover(-1);
+        LeftVsRightMouseover(0);
       }
-    })
+    });
+
+  //绘制标题
+  drawTitle(SVG,"Field Goal % by Distance");
+  //绘制折线图
+  drawLineChart(SVG,data,"FG",xScale,yScale);
   //绘制坐标轴
-  drawCoordinate(SVG,'.shotFGByDis',30,1);
+  drawCoordinate(SVG,'.shotFGByDis',30,100);
+}
+
+//绘制折线图
+function drawLineChart(SVG,data,dataName,xScale,yScale){
+  
+  var padding = 50;
+  var height = 400;
+
+  var linePath=d3.svg.line()//创建一个直线生成器
+                      .x(function(d,i){
+                        return xScale(i) - padding;
+                      })
+                      .y(function(d){
+                        return height - yScale(d) - padding;
+                      });
+
+  SVG.selectAll("path")
+      .data(data)
+      .enter()
+      .append("path")
+      .attr("transform","translate("+padding+","+padding+")")
+      .attr("d",function(d){
+        return linePath(d[dataName]);//返回线段生成器得到的路径
+      })
+      .attr("fill","none")
+      .attr("stroke-width",2)
+      .attr("stroke","Salmon");
 }
 
 //绘制坐标
@@ -440,6 +479,18 @@ function getData(data,player_id){
     }
   }
   return dataset;
+}
+
+//绘制标题
+function drawTitle(SVG,title){
+  var padding = 50;
+
+  SVG.append("text")
+      .attr("x",padding)
+      .attr("y",padding/2)
+      .attr("font-size",18)
+      .attr("font-family","幼圆")
+      .text(title);
 }
 
 /**
@@ -507,6 +558,9 @@ function drawShotFreLR(data){
 				.append("svg")
 				.attr("width","100%")
 				.attr("height","100%");
+  //绘制标题
+  drawTitle(svg,"Shot Frequency:Left Side vs. Right Side");
+  //绘制坐标轴
 	drawCoordinate(svg,".shotFreLeftVsRight");
 	svg.append("line")
 			.attr("x1",mid)
@@ -552,7 +606,7 @@ function drawShotFreLR(data){
 			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
 		}
 		else{
-			LeftVsRightMouseover(-1);
+			// LeftVsRightMouseover(0);
 		}
 	})
 
@@ -572,7 +626,10 @@ function drawFieldGoalLR(data){
 				.append("svg")
 				.attr("width","100%")
 				.attr("height","100%");
-	drawCoordinate(svg,".shotFGLeftVsRight",100,30);
+  //绘制标题
+  drawTitle(svg,"Field Goal%:Left Side vs. Right Side");
+  //绘制坐标轴
+	drawCoordinate(svg,".shotFGLeftVsRight",1,30);
 	svg.append("line")
 			.attr("x1",mid)
 			.attr("y1",padding)
@@ -611,7 +668,7 @@ function drawFieldGoalLR(data){
 			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
 		}
 		else{
-			LeftVsRightMouseover(-1);
+			LeftVsRightMouseover(0);
 		}
 	})
 
@@ -632,8 +689,21 @@ function LeftVsRightMouseover(index){
 		else if(i%2==0) return "#0f0";
 		else return "#00f";
 	});
+  d3.select(".shotFreByDis")
+    .selectAll("circle")
+    .attr("fill",function(d,i){
+      if(index/2 >= i && index/2 < i + 1) return "Salmon";
+      else return "transparent";
+    })
+    .attr("stroke",function(d,i){
+      if(index/2 >= i && index/2 < i + 1) return "DarkTurquoise";
+      else return "transparent";
+    })
+    .attr("stroke-width",3);
+
 	SvgMouseover(Math.floor(index/2));
 }
+
 function SvgMouseover(distance){
 	var padding = 50;
 	var divSvg = d3.select(".shotFreLeftVsRight");
