@@ -236,10 +236,11 @@ function drawShotFreByDis(data) {
               if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
                 //每一段的长度
                 var div = (width-2*padding)/31;
+                showCurSelected(Math.floor((x-padding)*2/div));
                 LeftVsRightMouseover(Math.floor((x-padding)*2/div));
                 }
               else{
-                LeftVsRightMouseover(0);
+                showCurSelected(0);
               }
             })
 
@@ -395,10 +396,11 @@ function drawShotFGByDis(data){
       if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
         //每一块的长度
         var div = (width-2*padding)/31;
+        showCurSelected(Math.floor((x-padding)*2/div));
         LeftVsRightMouseover(Math.floor((x-padding)*2/div));
         }
       else{
-        LeftVsRightMouseover(0);
+        showCurSelected(0);
       }
     });
 
@@ -496,6 +498,40 @@ function drawTitle(SVG,title){
       .attr("font-family","幼圆")
       .text(title);
 }
+
+//显示当前选中
+function showCurSelected(index){
+  d3.select(".shotFGByDis")
+    .selectAll("circle")
+    .attr("fill",function(d,i){
+      if(index/2 >= i && index/2 < i + 1) return "Salmon";
+      else return "transparent";
+    })
+    .attr("stroke",function(d,i){
+      if(index/2 >= i && index/2 < i + 1) return "DarkTurquoise";
+      else return "transparent";
+    })
+    .attr("stroke-width",3);
+    d3.select(".shotFreByDis")
+    .selectAll("circle")
+    .attr("fill",function(d,i){
+      if(index/2 >= i && index/2 < i + 1) return "Salmon";
+      else return "transparent";
+    })
+    .attr("stroke",function(d,i){
+      if(index/2 >= i && index/2 < i + 1) return "DarkTurquoise";
+      else return "transparent";
+    })
+    .attr("stroke-width",3);
+
+     // tooltip.html("distance: " + i + "<br/>" + "Fre%: " + Math.round(100) + "%")
+     //        .style("left", (800) + "px")
+     //        .style("top", (100) + "px")
+     //        .style("opacity",1.0);
+  SvgMouseover(Math.floor(index/2));
+}
+
+/**********************************************************************************************/
 
 /**
  * 得到每个距离下的左右 投篮数和进球数
@@ -608,9 +644,10 @@ function drawShotFreLR(data){
 		var y = d3.event.offsetY;
 		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
 			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
+      showCurSelected((height-padding-y)*2/div);
 		}
 		else{
-			// LeftVsRightMouseover(0);
+			LeftVsRightMouseover(0);
 		}
 	})
 
@@ -670,6 +707,7 @@ function drawFieldGoalLR(data){
 		var y = d3.event.offsetY;
 		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
 			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
+      showCurSelected((height-padding-y)*2/div);
 		}
 		else{
 			LeftVsRightMouseover(0);
@@ -693,17 +731,6 @@ function LeftVsRightMouseover(index){
 		else if(i%2==0) return "#0f0";
 		else return "#00f";
 	});
-  d3.select(".shotFreByDis")
-    .selectAll("circle")
-    .attr("fill",function(d,i){
-      if(index/2 >= i && index/2 < i + 1) return "Salmon";
-      else return "transparent";
-    })
-    .attr("stroke",function(d,i){
-      if(index/2 >= i && index/2 < i + 1) return "DarkTurquoise";
-      else return "transparent";
-    })
-    .attr("stroke-width",3);
 
 	SvgMouseover(Math.floor(index/2));
 }
