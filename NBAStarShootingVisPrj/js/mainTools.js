@@ -180,31 +180,7 @@ function drawShotFreByDis(data) {
           .domain([0,0.25])
           .range([padding,height]);
 
-  var linePath=d3.svg.line()//创建一个直线生成器
-                      .x(function(d,i){
-                        return xScale(i) - padding;
-                      })
-                      .y(function(d){
-                        return height - yScale(d) - padding;
-                      })
-                      // .interpolate("basis");//插值模式
-
-  //绘制折线图
-  SVG.selectAll("path")
-    .data(data)
-    .enter()
-    .append("path")
-    .attr("transform","translate("+padding+","+padding+")")
-    .attr("d",function(d){
-      return linePath(d.Fre);//返回线段生成器得到的路径
-    })
-    .attr("fill","none")
-    .attr("stroke-width",3)
-    .attr("stroke","Salmon");
-
   var dataset = data[0].Fre;
-  console.log(data[0]);
-  console.log(dataset);
   //绘制散点
   var circles = SVG.selectAll("circle")
                     .data(dataset)
@@ -269,6 +245,8 @@ function drawShotFreByDis(data) {
 
   //绘制标题
   drawTitle(SVG,"Shot Frequency % by Distance");
+  //绘制折线图
+  drawLineChart(SVG,data,"Fre",xScale,yScale);
   //绘制坐标轴
 	drawCoordinate(SVG,".shotFreByDis",30,0.25);
 }
@@ -329,26 +307,6 @@ function drawShotFGByDis(data){
           .domain([0,1])
           .range([padding,height - padding]);
   SVG.append("line").attr("class","lineClass1");//用于Mouseover事件
-  var linePath=d3.svg.line()//创建一个直线生成器
-                      .x(function(d,i){
-                        return xScale(i) - padding;
-                      })
-                      .y(function(d){
-                        return height - yScale(d) - padding;
-                      })
-                      // .interpolate("basis");//插值模式
-  //绘制折线图
-  SVG.selectAll("path")
-    .data(data)
-    .enter()
-    .append("path")
-    .attr("transform","translate("+padding+","+padding+")")
-    .attr("d",function(d){
-      return linePath(d.FG);//返回线段生成器得到的路径
-    })
-    .attr("fill","none")
-    .attr("stroke-width",3)
-    .attr("stroke","Salmon");
 
   var dataset = data[0].FG;
 
@@ -390,14 +348,6 @@ function drawShotFGByDis(data){
         //选中点 X 坐标 
         //d3.select(this)[0][0].cx.animVal.value
         
-        // var x = d3.select(this)[0][0].cx.animVal.value;
-        // d3.selectAll(".lineClass1")
-        //           .attr("x1",x)
-        //           .attr("y1",height-padding)
-        //           .attr("x2",x)
-        //           .attr("y2",padding)
-        //           .attr('stroke-width', '1')
-        //           .attr("stroke","gray");
       })
       .on("mousemove",function(d){
         /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
@@ -426,8 +376,38 @@ function drawShotFGByDis(data){
 
   //绘制标题
   drawTitle(SVG,"Field Goal % by Distance");
+  //绘制折线图
+  drawLineChart(SVG,data,"FG",xScale,yScale);
   //绘制坐标轴
   drawCoordinate(SVG,'.shotFGByDis',30,1);
+}
+
+//绘制折线图
+function drawLineChart(SVG,data,dataName,xScale,yScale){
+  
+  console.log(data);
+  var padding = 50;
+  var height = 400;
+
+  var linePath=d3.svg.line()//创建一个直线生成器
+                      .x(function(d,i){
+                        return xScale(i) - padding;
+                      })
+                      .y(function(d){
+                        return height - yScale(d) - padding;
+                      });
+
+  SVG.selectAll("path")
+      .data(data)
+      .enter()
+      .append("path")
+      .attr("transform","translate("+padding+","+padding+")")
+      .attr("d",function(d){
+        return linePath(d[dataName]);//返回线段生成器得到的路径
+      })
+      .attr("fill","none")
+      .attr("stroke-width",2)
+      .attr("stroke","Salmon");
 }
 
 //绘制坐标
