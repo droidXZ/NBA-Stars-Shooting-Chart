@@ -15,7 +15,7 @@ d3.json("json/16-17season.json",function(d){
 
 function starShootingChart(data){
   // svg固定宽高
-  var width = 500,height = 450;
+  var width = 500,height = 500;
   var xmlns = "http://www.w3.org/2000/svg";
   var version = 1.1;
   var svg = d3.selectAll('.starShootingChart')
@@ -41,11 +41,11 @@ function starShootingChart(data){
   // 定义比例尺
   var xScale = d3.scale.linear()
                        .domain([-250,250])
-                       .range([20,width]);
+                       .range([0,500]);
 
   var yScale = d3.scale.linear()
-                       .domain([0,470])
-                       .range([40,522]);
+                       .domain([0,320])
+                       .range([40,360]);
   //定义坐标轴
   var xAxis = d3.svg.axis()
                     .scale(xScale)
@@ -55,24 +55,6 @@ function starShootingChart(data){
                     .scale(yScale)
                     .orient("right")
                     .ticks(10);
- //绘制坐标轴
-  /*d3.selectAll(".svg_SSC")
-    .append("g")
-    .attr("class","axis")
-    .call(xAxis)
-    .attr("transfrom","translate(20, " + width - 20 +")")
-    .append("text")
-    .text("x轴")
-    .attr("transfrom","translate(" + width - 20 + ",20)");
-
-    d3.selectAll(".svg_SSC")
-      .append("g")
-      .attr("class","axis")
-      .call(yAxis)
-      .attr("transfrom","translate(0, " + height +")")
-      .append("text")
-      .text("y轴")
-      .attr("transfrom","translate(" + height + ",0)");*/
 
   d3.selectAll(".svg_SSC")
     .selectAll("rect")
@@ -94,10 +76,11 @@ function starShootingChart(data){
         return "rgba(9, 246, 32, 0.6)";
       }
     })
-    .on("mouseover",function(d){
+    .on("click",function(d){
       d3.select(this)
         .attr("stroke-width",2)
         .attr("stroke","#05b80c");
+      console.log(d.distance + "|" + d.loc_x + "|" +d.loc_y);
     })
     .on("mouseout",function(d){
       d3.select(this)
@@ -119,6 +102,7 @@ function getShotDetailData(data){
         el.action_type = 1;
       }
       // el.action_type = data.resultSets[0].rowSet[i][10],
+
       el.distance = data.resultSets[0].rowSet[i][16],
       el.loc_x = data.resultSets[0].rowSet[i][17],
       el.loc_y = data.resultSets[0].rowSet[i][18];
@@ -212,7 +196,7 @@ function drawShotFreByDis(data) {
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY + 20) + "px")
             .style("opacity",1.0);
-           
+
             //选中状态
             d3.select(this).attr("fill","Salmon")
                             .attr("stroke","DarkTurquoise")
@@ -362,9 +346,17 @@ function drawShotFGByDis(data){
       d3.select(this).attr("fill","Salmon")
                       .attr("stroke","DarkTurquoise")
                       .attr("stroke-width",3);
-        //选中点 X 坐标 
+        //选中点 X 坐标
         //d3.select(this)[0][0].cx.animVal.value
-        
+
+        var x = d3.select(this)[0][0].cx.animVal.value;
+        d3.selectAll(".lineClass1")
+                  .attr("x1",x)
+                  .attr("y1",height-padding)
+                  .attr("x2",x)
+                  .attr("y2",padding)
+                  .attr('stroke-width', '1')
+                  .attr("stroke","gray");
       })
       .on("mousemove",function(d){
         /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
@@ -414,7 +406,7 @@ function drawShotFGByDis(data){
 
 //绘制折线图
 function drawLineChart(SVG,data,dataName,xScale,yScale){
-  
+
   var padding = 50;
   var height = 400;
 
@@ -495,7 +487,7 @@ function drawTitle(SVG,title){
       .attr("x",padding)
       .attr("y",padding/2)
       .attr("font-size",18)
-      .attr("font-family","幼圆")
+      .attr("font-family","微软雅黑")
       .text(title);
 }
 
