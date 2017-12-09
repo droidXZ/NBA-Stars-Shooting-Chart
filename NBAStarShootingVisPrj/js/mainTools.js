@@ -1,17 +1,6 @@
 /* 通用工具 */
-d3.json("json/16-17season.json",function(d){
+// 调用加载json数据进行绘制
 
-  	console.log(d.resultSets[0].headers);
-    starShootingChart(d);
-
-    var data = getData(d,currentStarId);
-
-  	drawShotFreByDis(getShotFreData(data));
-    drawShotFGByDis(getShotFGData(data));
-  	drawShotFreLR(data);
-  	drawFieldGoalLR(data);
-
-});
 
 function starShootingChart(data){
   // svg固定宽高
@@ -89,7 +78,6 @@ function starShootingChart(data){
 
     svg.append("circle").attr("class","circleClass");//用于mouseover事件
 }
-
 //获取球员投篮命中与否 距离 位置。
 function getShotDetailData(data){
   //处理数据
@@ -531,8 +519,8 @@ function showRectTooltip(data,index,tooltip,className,dataName){
         if (dataName == "FG") {
           leftData = Math.round(data[i*2] * 100);
           rightData = Math.round(data[i*2+1] * 100);
-        
-          tooltip.html("distance: " + i + "ft" + "<br/>" + 
+
+          tooltip.html("distance: " + i + "ft" + "<br/>" +
                       "left " + dataName + " %: " + leftData + "%" + "<br/>" +
                       "right " + dataName + " %: " + rightData + "%")
                 .style("left", (d3.event.pageX) + "px")
@@ -543,7 +531,7 @@ function showRectTooltip(data,index,tooltip,className,dataName){
 
           leftData = Math.round(data[i*2]);
           rightData = Math.round(data[i*2+1]);
-        
+
           tooltip.html("distance: " + i + "ft" + "<br/>" +
                       "left " + dataName + " : " + leftData + "<br/>" +
                       "right " + dataName + " : " + rightData)
@@ -809,7 +797,7 @@ function drawLineChartLR(svg,dataset,mid,divW,height,div){
 		}
 		pre = now;
 	}
-	   
+
 }
 
 /**
