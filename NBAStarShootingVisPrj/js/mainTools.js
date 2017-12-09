@@ -222,12 +222,10 @@ function drawShotFreByDis(data) {
                 //每一段的长度
                 var div = (width-2*padding)/31;
                 showPointTooltip((x-padding)*2/div,tooltip,".shotFreByDis","Fre");
-                showCurSelectedpPoint(Math.floor((x-padding)*2/div));
                 LeftVsRightMouseover(Math.floor((x-padding)*2/div));
                 }
               else{
-                showCurSelectedpPoint(0);
-                LeftVsRightMouseover(0);
+                LeftVsRightMouseover(-1);
               }
               })
               .on("mouseout",function(){
@@ -371,12 +369,10 @@ function drawShotFGByDis(data){
         var index = (x-padding)*2/div;
 
         showPointTooltip((x-padding)*2/div,tooltip,".shotFGByDis","FG");
-        showCurSelectedpPoint(Math.floor((x-padding)*2/div));
         LeftVsRightMouseover(Math.floor((x-padding)*2/div));
         }
       else{
-        showCurSelectedpPoint(0);
-        LeftVsRightMouseover(0);
+        LeftVsRightMouseover(-1);
       }
     })
     .on("mouseout",function(){
@@ -679,11 +675,10 @@ function drawShotFreLR(data){
 		var y = d3.event.offsetY;
 		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
 			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
-      showCurSelectedpPoint((height-padding-y)*2/div);
       showRectTooltip(shotData,(height-padding-y)*2/div,tooltip,".shotFreLeftVsRight","Fre");
 		}
 		else{
-			LeftVsRightMouseover(0);
+			LeftVsRightMouseover(-1);
 		}
 	})
   .on("mouseout",function(){
@@ -755,11 +750,10 @@ function drawFieldGoalLR(data){
 		var y = d3.event.offsetY;
 		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
 			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
-      showCurSelectedpPoint((height-padding-y)*2/div);
       showRectTooltip(shotData,(height-padding-y)*2/div,tooltip,".shotFGLeftVsRight","FG");
 		}
 		else{
-			LeftVsRightMouseover(0);
+			LeftVsRightMouseover(-1);
 		}
 	})
   .on("mouseout",function(){
@@ -835,11 +829,12 @@ function LeftVsRightMouseover(index){
 		else if(i%2==0) return "rgba(117, 205, 117, 0.6)";
 		else return "rgba(187, 139, 230, 0.6)";
 	});
-
+	showCurSelectedpPoint(index);
 	SvgMouseover(Math.floor(index/2));
 }
 
 function SvgMouseover(distance){
+	if(distance===-1) distance = 0;
 	var padding = 50;
 	var divSvg = d3.select(".shotFreLeftVsRight");
     var width = divSvg[0][0].offsetWidth;  //456
