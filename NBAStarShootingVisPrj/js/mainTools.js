@@ -221,20 +221,24 @@ function drawShotFreByDis(data) {
               if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
                 //每一段的长度
                 var div = (width-2*padding)/31;
-                showCurSelected(Math.floor((x-padding)*2/div));
+                showPointTooltip((x-padding)*2/div,tooltip,".shotFreByDis","Fre");
+                showCurSelectedpPoint(Math.floor((x-padding)*2/div));
                 LeftVsRightMouseover(Math.floor((x-padding)*2/div));
                 }
               else{
-                showCurSelected(0);
+                showCurSelectedpPoint(0);
               }
-            })
+              })
+              .on("mouseout",function(){
+                tooltip.style("opacity",0.0);
+              });
 
   //绘制标题
   drawTitle(SVG,"Shot Frequency % by Distance");
   //绘制折线图
   drawLineChart(SVG,data,"Fre",xScale,yScale);
   //绘制坐标轴
-	drawCoordinate(SVG,".shotFreByDis",30,25);
+	drawCoordinate(SVG,".shotFreByDis",0,30,0,25);
 }
 
 // 返回球员投篮命中率数据
@@ -323,10 +327,10 @@ function drawShotFGByDis(data){
       （2）通过更改样式 left 和 top 来设定提示框的位置
       （3）设定提示框的透明度为1.0（完全不透明）
       */
-      tooltip.html("distance: " + i + "<br/>" + "FG%: " + Math.round(d*100) + "%")
-              .style("left", (d3.event.pageX) + "px")
-              .style("top", (d3.event.pageY + 20) + "px")
-              .style("opacity",1.0);
+      // tooltip.html("distance: " + i + "<br/>" + "FG%: " + Math.round(d*100) + "%")
+      //         .style("left", (d3.event.pageX) + "px")
+      //         .style("top", (d3.event.pageY + 20) + "px")
+      //         .style("opacity",1.0);
       //选中状态
       d3.select(this).attr("fill","Salmon")
                       .attr("stroke","DarkTurquoise")
@@ -365,12 +369,12 @@ function drawShotFGByDis(data){
 
         var index = (x-padding)*2/div;
 
-        showTooltip((x-padding)*2/div,tooltip);
-        showCurSelected(Math.floor((x-padding)*2/div));
+        showPointTooltip((x-padding)*2/div,tooltip,".shotFGByDis","FG");
+        showCurSelectedpPoint(Math.floor((x-padding)*2/div));
         LeftVsRightMouseover(Math.floor((x-padding)*2/div));
         }
       else{
-        showCurSelected(0);
+        showCurSelectedpPoint(0);
       }
     })
     .on("mouseout",function(){
@@ -382,7 +386,7 @@ function drawShotFGByDis(data){
   //绘制折线图
   drawLineChart(SVG,data,"FG",xScale,yScale);
   //绘制坐标轴
-  drawCoordinate(SVG,'.shotFGByDis',30,100);
+  drawCoordinate(SVG,'.shotFGByDis',0,30,0,100);
 }
 
 //绘制折线图
@@ -413,7 +417,7 @@ function drawLineChart(SVG,data,dataName,xScale,yScale){
 }
 
 //绘制坐标
-function drawCoordinate(SVG,className,xMax,yMax){
+function drawCoordinate(SVG,className,xMin,xMax,yMin,yMax){
 	//获取当前DOM宽高
   var div = d3.select(className);
   var width = div[0][0].offsetWidth;  //456
@@ -422,10 +426,10 @@ function drawCoordinate(SVG,className,xMax,yMax){
 
   // 设置比例尺
   xScale = d3.scale.linear()
-          .domain([0,xMax])
+          .domain([xMin,xMax])
           .range([0,width - padding*2]);
   yScale = d3.scale.linear()
-          .domain([yMax,0])
+          .domain([yMax,yMin])
           .range([0,height - padding*2]);
 
   var xAxis = d3.svg.axis()
@@ -473,7 +477,7 @@ function drawTitle(SVG,title){
 }
 
 //显示当前选中
-function showCurSelected(index){
+function showCurSelectedpPoint(index){
 
   //添加一个提示框
   var tooltip = d3.select("body")
@@ -505,21 +509,53 @@ function showCurSelected(index){
     })
     .attr("stroke-width",3);
 
-
-  SvgMouseover(Math.floor(index/2));
+    SvgMouseover(Math.floor(index/2));
 }
 
-function showTooltip(index,tooltip){
+function showPointTooltip(index,tooltip,className,dataName){
 
-  d3.select(".shotFGByDis")
+  d3.select(className)
     .selectAll("circle")
     .attr("",function(d,i){
       if(index/2 >= i && index/2 < i + 1){
-        tooltip.html("distance: " + i + "<br/>" + "FG%: " + Math.round(d*100) + "%")
+        tooltip.html("distance: " + i + "ft" + "<br/>" + dataName + "%: " + Math.round(d*100) + "%")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY + 20) + "px")
                 .style("opacity",0.8);
       }
+    })
+}
+
+function showRectTooltip(data,index,tooltip,className,dataName){
+
+  d3.select(className)
+    .selectAll("rect")
+    .attr("",function(d,i){
+      if(index/2 >= i && index/2 < i + 1){
+        if (dataName == "FG") {
+          leftData = Math.round(data[i*2] * 100);
+          rightData = Math.round(data[i*2+1] * 100);
+        
+          tooltip.html("distance: " + i + "ft" + "<br/>" + 
+                      "left " + dataName + " %: " + leftData + "%" + "<br/>" +
+                      "right " + dataName + " %: " + rightData + "%")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY + 20) + "px")
+                .style("opacity",0.8);
+        }
+        else if (dataName == "Fre") {
+
+          leftData = Math.round(data[i*2]);
+          rightData = Math.round(data[i*2+1]);
+        
+          tooltip.html("distance: " + i + "ft" + "<br/>" +
+                      "left " + dataName + " : " + leftData + "<br/>" +
+                      "right " + dataName + " : " + rightData)
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY + 20) + "px")
+                .style("opacity",0.8);
+      }
+    }
     })
 }
 
@@ -593,7 +629,7 @@ function drawShotFreLR(data){
   //绘制标题
   drawTitle(svg,"Shot Frequency:Left Side vs. Right Side");
   //绘制坐标轴
-	drawCoordinate(svg,".shotFreLeftVsRight");
+	drawCoordinate(svg,".shotFreLeftVsRight",100,100,0,30);
 	svg.append("line")
 			.attr("x1",mid)
 			.attr("y1",padding)
@@ -623,7 +659,7 @@ function drawShotFreLR(data){
 			.attr("fill", function(d,i){
 				if(i % 2 === 0) return "rgba(117, 205, 117, 0.6)";
 				else return "rgba(187, 139, 230, 0.6)";})
-		    .attr("x", function(d,i){
+		  .attr("x", function(d,i){
 		    	if(i%2 === 0)return mid-divW*shotData[i];
 		    	else return mid;})
 			.attr("y", function(d,i) {
@@ -631,17 +667,28 @@ function drawShotFreLR(data){
 				else return height-padding-div*((i-1)/2+1);})
 			.attr("width", function(d,i) {return divW*shotData[i];})
 			.attr("height",div);
+
+  //添加一个提示框
+  var tooltip = d3.select("body")
+                  .append("div")
+                  .attr("class","tooltip")
+                  .style("opacity",0.0);
+
 	svg.on("mousemove",function(){
 		var x = d3.event.offsetX;
 		var y = d3.event.offsetY;
 		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
 			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
-      showCurSelected((height-padding-y)*2/div);
+      showCurSelectedpPoint((height-padding-y)*2/div);
+      showRectTooltip(shotData,(height-padding-y)*2/div,tooltip,".shotFreLeftVsRight","Fre");
 		}
 		else{
 			LeftVsRightMouseover(0);
 		}
 	})
+  .on("mouseout",function(){
+    tooltip.style("opacity",0.0);
+  });
 
 }
 
@@ -649,10 +696,11 @@ function drawShotFreLR(data){
  * 绘制左右对比的命中率图
  */
 function drawFieldGoalLR(data){
+
 	var padding = 50;
 	var divSvg = d3.select(".shotFreLeftVsRight");
-    var width = divSvg[0][0].offsetWidth;  //456
-    var height = divSvg[0][0].offsetHeight;  //400
+  var width = divSvg[0][0].offsetWidth;  //456
+  var height = divSvg[0][0].offsetHeight;  //400
 	var mid = width/2;
 	var div = (height-2*padding)/31;
 	var svg = d3.select(".shotFGLeftVsRight")
@@ -662,7 +710,7 @@ function drawFieldGoalLR(data){
   //绘制标题
   drawTitle(svg,"Field Goal%:Left Side vs. Right Side");
   //绘制坐标轴
-	drawCoordinate(svg,".shotFGLeftVsRight",1,30);
+	drawCoordinate(svg,".shotFGLeftVsRight",0,1,0,30);
 	svg.append("line")
 			.attr("x1",mid)
 			.attr("y1",padding)
@@ -678,6 +726,7 @@ function drawFieldGoalLR(data){
 		shotData.push(dataset[i].goal_right/dataset[i].shot_right);
 	}
 	var divW = (mid-padding)/100;
+
 	svg.selectAll("rect")
 			.data(shotData)
 			.enter()
@@ -694,17 +743,27 @@ function drawFieldGoalLR(data){
 			.attr("width", function(d,i) {return divW*shotData[i]*100;})
 			.attr("height",div)
 
-	svg.on("mousemove",function(){
+  //添加一个提示框
+  var tooltip = d3.select("body")
+                  .append("div")
+                  .attr("class","tooltip")
+                  .style("opacity",0.0);
+
+	svg.on("mousemove",function(d,i){
 		var x = d3.event.offsetX;
 		var y = d3.event.offsetY;
 		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
 			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
-      showCurSelected((height-padding-y)*2/div);
+      showCurSelectedpPoint((height-padding-y)*2/div);
+      showRectTooltip(shotData,(height-padding-y)*2/div,tooltip,".shotFGLeftVsRight","FG");
 		}
 		else{
 			LeftVsRightMouseover(0);
 		}
 	})
+  .on("mouseout",function(){
+    tooltip.style("opacity",0.0);
+  });
 
 }
 
