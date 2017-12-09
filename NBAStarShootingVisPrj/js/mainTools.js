@@ -667,7 +667,7 @@ function drawShotFreLR(data){
 				else return height-padding-div*((i-1)/2+1);})
 			.attr("width", function(d,i) {return divW*shotData[i];})
 			.attr("height",div);
-
+	drawLineChartLR(svg,shotData,mid,divW,height,div);
   //添加一个提示框
   var tooltip = d3.select("body")
                   .append("div")
@@ -699,8 +699,8 @@ function drawFieldGoalLR(data){
 
 	var padding = 50;
 	var divSvg = d3.select(".shotFreLeftVsRight");
-  var width = divSvg[0][0].offsetWidth;  //456
-  var height = divSvg[0][0].offsetHeight;  //400
+    var width = divSvg[0][0].offsetWidth;  //456
+    var height = divSvg[0][0].offsetHeight;  //400
 	var mid = width/2;
 	var div = (height-2*padding)/31;
 	var svg = d3.select(".shotFGLeftVsRight")
@@ -743,6 +743,7 @@ function drawFieldGoalLR(data){
 			.attr("width", function(d,i) {return divW*shotData[i]*100;})
 			.attr("height",div)
 
+	drawLineChartLR(svg,shotData,mid,divW*100,height,div);
   //添加一个提示框
   var tooltip = d3.select("body")
                   .append("div")
@@ -765,6 +766,56 @@ function drawFieldGoalLR(data){
     tooltip.style("opacity",0.0);
   });
 
+}
+
+/**
+ * 绘制左右对比的折线图
+ */
+function drawLineChartLR(svg,dataset,mid,divW,height,div){
+	var padding = 50;
+	var pre,now;
+	pre = mid+(dataset[1]-dataset[0])*divW;
+
+	for(var i =2 ;i<dataset.length;i=i+2){
+		now = mid+(dataset[i+1]-dataset[i])*divW;
+		console.log(now);
+		if((pre>mid&&now<mid)||(pre<mid&&now>mid)){
+			svg.append("line")
+			.attr("x1",pre)
+			.attr("y1",height - padding - (i/2-1)*div)
+			.attr("x2",mid)
+			.attr("y2",height - padding - (i/2-0.5)*div)
+			.attr('stroke-width', '2')
+			.attr("stroke",function(){
+				if(pre<mid) return "rgba(117, 205, 117, 1)";
+				else return "rgba(187, 139, 230, 1)";
+			});
+			svg.append("line")
+			.attr("x1",mid)
+			.attr("y1",height - padding - (i/2-0.5)*div)
+			.attr("x2",now)
+			.attr("y2",height - padding - i/2*div)
+			.attr('stroke-width', '2')
+			.attr("stroke",function(){
+				if(now<mid) return "rgba(117, 205, 117, 1)";
+				else return "rgba(187, 139, 230, 1)";
+			});
+		}
+		else {
+			svg.append("line")
+			.attr("x1",pre)
+			.attr("y1",height - padding - (i/2-1)*div)
+			.attr("x2",now)
+			.attr("y2",height - padding - i/2*div)
+			.attr('stroke-width', '2')
+			.attr("stroke",function(){
+				if(now<mid||pre<mid) return "rgba(117, 205, 117, 1)";
+				else return "rgba(187, 139, 230, 1)";
+			});
+		}
+		pre = now;
+	}
+	   
 }
 
 /**
