@@ -227,6 +227,7 @@ function drawShotFreByDis(data) {
                 }
               else{
                 showCurSelectedpPoint(0);
+                LeftVsRightMouseover(0);
               }
               })
               .on("mouseout",function(){
@@ -375,6 +376,7 @@ function drawShotFGByDis(data){
         }
       else{
         showCurSelectedpPoint(0);
+        LeftVsRightMouseover(0);
       }
     })
     .on("mouseout",function(){
@@ -508,8 +510,6 @@ function showCurSelectedpPoint(index){
       else return "transparent";
     })
     .attr("stroke-width",3);
-
-    SvgMouseover(Math.floor(index/2));
 }
 
 function showPointTooltip(index,tooltip,className,dataName){
