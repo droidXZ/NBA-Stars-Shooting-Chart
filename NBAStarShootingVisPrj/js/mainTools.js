@@ -24,19 +24,52 @@
                   .attr("class","tooltip4")
                   .style("opacity",0.0);
 
+//添加svg
+var svg0,svg1,svg2,svg3,svg4;
+var padding = 50;
+  //获取当前DOM宽高
+  var div = d3.select(".shotFreByDis");
+  var width = div[0][0].offsetWidth;  //456
+  var height = div[0][0].offsetHeight;  //400
+
+function createSvg(){
+  svg0 = d3.selectAll('.starShootingChart')
+              .append('svg')
+              .attr("class","svg_SSC")
+              .attr("width",500)
+              .attr("height",500)
+              .attr("version",1.1)
+              .attr("xmlns","http://www.w3.org/2000/svg");
+
+  svg1 = d3.select(".shotFreByDis")
+              .append("svg")
+              .attr("width",width)
+              .attr("height",height);
+  svg2 = d3.select(".shotFGByDis")
+              .append("svg")
+              .attr("width",width)
+              .attr("height",height);
+  svg3 = d3.select(".shotFreLeftVsRight")
+              .append("svg")
+              .attr("width",width)
+              .attr("height",height);
+  svg4 = d3.select(".shotFGLeftVsRight")
+              .append("svg")
+              .attr("width",width)
+              .attr("height",height);
+}
+//移除svg
+function removeSvg(){
+  d3.selectAll('svg')
+    .remove();
+}
 function starShootingChart(data){
   // svg固定宽高
   var width = 500,height = 500;
   var xmlns = "http://www.w3.org/2000/svg";
   var version = 1.1;
-  var svg = d3.selectAll('.starShootingChart')
-              .append('svg')
-              .attr("class","svg_SSC")
-              .attr("width",width)
-              .attr("height",height)
-              .attr("version",version)
-              .attr("xmlns",xmlns);
 
+  svg = svg0;
   //通过创建 xmlns向svg添加image图像
   var court = document.createElementNS(xmlns,"image");
       court.href.baseVal = "img/uipic/court.png";
@@ -156,17 +189,7 @@ function getShotFreData(data) {
 //绘制ShotFrequenByDistance图
 function drawShotFreByDis(data) {
 
-  var padding = 50;
-  //获取当前DOM宽高
-  var div = d3.select(".shotFreByDis");
-  var width = div[0][0].offsetWidth;  //456
-  var height = div[0][0].offsetHeight;  //400
-
-	var SVG = d3.select(".shotFreByDis")
-      				.append("svg")
-      				.attr("width",width)
-      				.attr("height",height);
-
+  SVG = svg1;
   
   SVG.append("line").attr("class","lineClass1");//用于Mouseover事件
   // 设置比例尺
@@ -258,16 +281,7 @@ function getShotFGData(data) {
 
 //绘制球员各距离命中率图像
 function drawShotFGByDis(data){
-  //获取当前DOM宽高
-  var div = d3.select(".shotFGByDis");
-  var width = div[0][0].offsetWidth;  //456
-  var height = div[0][0].offsetHeight;  //400
-  var padding = 50;
-
-  var SVG = d3.select(".shotFGByDis")
-              .append("svg")
-              .attr("width",width)
-              .attr("height",height);
+  SVG = svg2;
 
 // 设置比例尺
   var xScale = d3.scale.linear()
@@ -334,8 +348,10 @@ function drawShotFGByDis(data){
 //绘制折线图
 function drawLineChart(SVG,data,dataName,xScale,yScale){
 
+  var div = d3.select(".shotFGByDis");
+  var width = div[0][0].offsetWidth;  //456
+  var height = div[0][0].offsetHeight;  //400
   var padding = 50;
-  var height = 400;
 
   var linePath=d3.svg.line()//创建一个直线生成器
                       .x(function(d,i){
@@ -451,6 +467,9 @@ function showCurSelectedpPoint(index){
     })
     .attr("stroke-width",3);
 }
+
+// var text = d3.select(".shotFreByDis")
+//               .append("text")
 
 function showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4){
   var left,top;
@@ -607,17 +626,10 @@ function getGoalByDistance(data){
  * 绘制左右对比的投篮频率图
  */
 function drawShotFreLR(data){
-	var padding = 50;
-	var divSvg = d3.select(".shotFreLeftVsRight");
-    var width = divSvg[0][0].offsetWidth;  //456
-    var height = divSvg[0][0].offsetHeight;  //400
 
 	var mid = width/2;
 	var div = (height-2*padding)/31;
-	var svg = d3.select(".shotFreLeftVsRight")
-				.append("svg")
-				.attr("width","100%")
-				.attr("height","100%");
+  svg = svg3;
   //绘制标题
   drawTitle(svg,"Shot Frequency:Left Side vs. Right Side");
   //绘制坐标轴
@@ -689,16 +701,10 @@ function drawShotFreLR(data){
  */
 function drawFieldGoalLR(data){
 
-	var padding = 50;
-	var divSvg = d3.select(".shotFreLeftVsRight");
-    var width = divSvg[0][0].offsetWidth;  //456
-    var height = divSvg[0][0].offsetHeight;  //400
 	var mid = width/2;
 	var div = (height-2*padding)/31;
-	var svg = d3.select(".shotFGLeftVsRight")
-				.append("svg")
-				.attr("width","100%")
-				.attr("height","100%");
+	svg = svg4;
+
   //绘制标题
   drawTitle(svg,"Field Goal%:Left Side vs. Right Side");
   //绘制坐标轴
@@ -909,5 +915,6 @@ function loadDataToDraw(){
   });
 }
 
+createSvg();
 loadDataToDraw();
 

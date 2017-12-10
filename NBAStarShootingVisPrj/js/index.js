@@ -116,5 +116,7 @@
     currentStarId = Number(idStr);
     // 在下面调用绘制函数更改当前的信息及图片
     bindStarData();
+    removeSvg();
+    createSvg();
     loadDataToDraw();
   }

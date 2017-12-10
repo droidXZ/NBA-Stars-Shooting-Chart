@@ -379,3 +379,37 @@
     font-family: sans-serif;
     font-size: 15px;
   }
+
+
+/*test*/
+.warper_right .shotFreByDis {
+  float: left;
+  width: 450px;
+  min-width: 400px;
+  height: 350px;
+  /*background-color: #6adfeb;*/
+}
+
+.warper_right .shotFreLeftVsRight {
+  float: right;
+  width: 450px;
+  min-width: 400px;
+  height: 350px;
+  /*background-color: #ebe43c;*/
+}
+
+.warper_right .shotFGByDis {
+  float: left;
+  width: 450px;
+  min-width: 400px;
+  height: 350px;
+  /*background-color: #22f024;*/
+}
+
+.warper_right .shotFGLeftVsRight {
+  float: right;
+  width: 450px;
+  min-width: 400px;
+  height: 350px;
+  /*background-color: #14e1ee;*/
+}
