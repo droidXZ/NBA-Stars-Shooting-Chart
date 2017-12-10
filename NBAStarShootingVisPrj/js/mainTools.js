@@ -673,6 +673,7 @@ function drawShotFreLR(data){
 			.attr("height",div);
 	drawLineChartLR(svg,shotData,mid,divW,height,div);
 	drawFlag(svg,div);
+	drawScaleLR(svg,mid,height,divW*100,100);
   //添加一个提示框
   var tooltip = d3.select("body")
                   .append("div")
@@ -708,7 +709,7 @@ function drawFieldGoalLR(data){
   //绘制标题
   drawTitle(svg,"Field Goal%:Left Side vs. Right Side");
   //绘制坐标轴
-	drawCoordinate(svg,".shotFGLeftVsRight",0,1,0,30);
+	drawCoordinate(svg,".shotFGLeftVsRight",0,0,0,30);
 	svg.append("line")
 			.attr("x1",mid)
 			.attr("y1",padding)
@@ -743,7 +744,7 @@ function drawFieldGoalLR(data){
 
 	drawLineChartLR(svg,shotData,mid,divW*100,height,div);
 	drawFlag(svg,div);
-
+  drawScaleLR(svg,mid,height,divW*50,0.5);
 	svg.on("mousemove",function(d,i){
 		var x = d3.event.offsetX;
 		var y = d3.event.offsetY;
@@ -764,6 +765,26 @@ function drawFieldGoalLR(data){
   });
 
 }
+
+/**
+ * 刻度
+ */
+function drawScaleLR(svg,mid,height,len,num){
+	var padding = 50;
+	svg.append("line").attr("x1",mid-len).attr("x2",mid-len)
+								    .attr("y1",height-padding).attr("y2",height-padding+6)
+								    .attr("stroke","black").attr("shape-rendering","crispEdges");
+	svg.append("text").text(num.toString()).attr("x",mid-len-15).attr("y",height-padding+20).attr("font-weight","bold");
+	svg.append("line").attr("x1",mid).attr("x2",mid)
+								    .attr("y1",height-padding).attr("y2",height-padding+6)
+								    .attr("stroke","black").attr("shape-rendering","crispEdges");
+	svg.append("text").text("0").attr("x",mid-5).attr("y",height-padding+20).attr("font-weight","bold");
+	svg.append("line").attr("x1",mid+len).attr("x2",mid+len)
+								    .attr("y1",height-padding).attr("y2",height-padding+6)
+								    .attr("stroke","black").attr("shape-rendering","crispEdges");
+  svg.append("text").text(num.toString()).attr("x",mid+len-15).attr("y",height-padding+20).attr("font-weight","bold");
+}
+
 /**
  * 绘制flag
  */
@@ -917,4 +938,3 @@ function loadDataToDraw(){
 
 createSvg();
 loadDataToDraw();
-
