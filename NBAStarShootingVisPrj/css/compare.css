@@ -1,0 +1,389 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.clear {
+  clear: both;
+}
+.container {
+  position: relative;
+  height: auto;
+}
+/*  头部样式  */
+.container .header {
+  position: relative;
+  margin: 0 auto;
+  height: 62px;
+  min-width: 1250px;
+  padding: 4px;
+  background-color: #1D428A;
+}
+
+.header img {
+  height: 62px;
+  margin-left: 64px;
+}
+
+.header .title {
+  position: absolute;
+  height: 62px;
+  top: 0;
+  left: 220px;
+  text-align: center;
+}
+
+.title h1 {
+  color: #FFFFFF;
+  line-height: 48px;
+}
+
+.title p{
+  display: inline-block;
+  color: #FFFFFF;
+}
+
+.header .updateTips {
+  float: right;
+  margin-right: 16px;
+  line-height: 70px;
+  color: #FFFFFF;
+}
+/* nav 导航栏 */
+.container .navBox {
+  min-width: 600px;
+  height: 40px;
+  background-color: #032F4F;
+}
+
+.navBox .navList {
+  width: 320px;
+  margin: 0 auto;
+  height: 40px;
+  list-style: none;
+}
+
+.navList .navItem {
+  display: inline-block;
+  width: 90px;
+  height: 36px;
+  margin-left: 30px;
+  line-height: 36px;
+  text-align: center;
+}
+
+.navItem a {
+  color: #FFF;
+  text-decoration: none;
+}
+
+.navItem:hover {
+  border-bottom: 2px solid #FF6666;
+  cursor: pointer;
+}
+
+.navActive {
+  border-bottom: 2px solid #FF6666;
+}
+
+/* 搜索球星区域 .*/
+.selectPlayer {
+  position: absolute;
+  top: 160px;
+  left: 450px;
+  width: 610px;
+  height: 500px;
+  background-color: #DADADA;
+  border-radius: 20px;
+  display: none;
+  z-index: 101;
+}
+
+.selectPlayer .serachPlayerBox {
+  width: 100%;
+  height: 60px;
+  border-radius: 20px;
+}
+
+.serachPlayerBox input {
+  width: 200px;
+  height: 28px;
+  margin-top: 16px;
+  margin-left: 110px;
+}
+
+.serachButtonBox {
+  float: right;
+  width: 220px;
+  height: 60px;
+  margin-right: 60px;
+}
+
+.serachPlayerBox span {
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  margin-top: 16px;
+  margin-left: 10px;
+  background-color: #415faf;
+  text-align: center;
+  line-height: 32px;
+  border-radius: 8px;
+}
+
+.serachPlayerBox span:hover {
+  cursor: pointer;
+}
+
+.serachStarPicBox {
+  width: 100%;
+  height: 440px;
+  position: relative;
+  overflow: hidden;
+}
+
+.starPicSelect {
+  float: left;
+  width: 90px;
+  height: 110px;
+  margin-left: 10px;
+  /*margin-top: 12px;*/
+}
+
+.starPicSelect img{
+  width: 90px;
+  height: 65px;
+  background-color: #242424;
+}
+
+.starPicSelect span{
+  display: block;
+  width: 90px;
+  height: 30px;
+  font-size: 10px;
+  text-align: center;
+}
+
+.starPicSelect:hover {
+  cursor: pointer;
+}
+
+/*  绘制区域样式  */
+.container .warper {
+  position: relative;
+  margin: 0 auto;
+  min-width: 1250px;
+  height: auto;
+}
+
+.warper .warper_left{
+  position: absolute;
+  width: 40%;
+  min-width: 640px;
+  top: 0;
+  left: 0;
+}
+
+.warper .warper_right{
+  position: absolute;
+  width: 60%;
+  min-width: 800px;
+  top: 0;
+  right: 0;
+  padding-bottom: 72px;
+}
+
+/* 球星数据展示 */
+.warper_left .top_starShow {
+  width: 100%;
+  min-width: 450px;
+  margin-top: 15px;
+  position:relative;
+}
+
+.top_starShow .star_pic {
+  width: 40%;
+  min-width: 240px;
+  height: 175px;
+  margin-top: 20px;
+  position:relative;
+  float: left;
+}
+
+.star_pic #starPic {
+  width: 230px;
+  height: 165px;
+  margin-left: 10px;
+  background-color: #EAEAEA;
+  border-radius: 8px;
+}
+
+.star_pic #teamLogo {
+  position: absolute;
+  top: 5px;
+  left: 20px;
+  width: 40px;
+  height: 32px;
+}
+
+.top_starInfo {
+  width: 180px;
+  margin-top: -20px;
+  margin-left: 30px;
+  text-align: center;
+}
+
+.top_starData {
+  float: right;
+  width: 58%;
+  min-width: 280px;
+  height: 240px;
+  margin-left: 5px;
+}
+
+.top_starData .starSummary {
+  width: 80%;
+  min-width: 240px;
+  font-size: 14px;
+  margin-top: 5px;
+  color: #000000;
+  margin-top: 15px;
+  margin-left: 20px;
+}
+
+.starSummary .starData {
+  color: #000000;
+  font-weight: bold;
+}
+
+.starSummary .starRank {
+  color: #888888;
+}
+
+.buttonBox , .buttonBoxR {
+  width: 180px;
+  height: 32px;
+  padding: 4px;
+  background-color: #D1D1D1;
+  border: 1px solid #EAEAEA;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-left: 50px;
+  text-align: center;
+  line-height: 32px;
+}
+
+.buttonBox:hover , .buttonBoxR:hover {
+  cursor: pointer;
+}
+
+/* star投篮散点图 */
+.starShootingChart {
+  width: 100%;
+  min-width: 520px;
+  height: 450px;
+  margin-top: 20px;
+}
+
+.starShootingChartR {
+  /*float: right;*/
+  width: 100%;
+  min-width: 520px;
+  height: 450px;
+  margin-top: 20px;
+}
+
+.starShootingChart p {
+  margin-left: 80px;
+}
+
+.svg_SSC {
+  margin-top: 10px;
+  margin-left: 60px;
+}
+/* 右部 绘制区域 */
+/*.warper_right .theDigDraw{
+  width: 100%;
+  min-width: 800px;
+  height: 600px;
+  background-color: #9f91ed;
+}*/
+
+.warper_left .shotFreByDis {
+  float: left;
+  width: 450px;
+  min-width: 400px;
+  height: 400px;
+  /*background-color: #6adfeb;*/
+}
+
+.warper_left .shotFreLeftVsRight {
+  float: left;
+  width: 450px;
+  min-width: 400px;
+  height: 400px;
+  /*background-color: #ebe43c;*/
+}
+
+.warper_left .shotFGByDis {
+  float: left;
+  width: 450px%;
+  min-width: 400px;
+  height: 400px;
+  /*background-color: #22f024;*/
+}
+
+.warper_left .shotFGLeftVsRight {
+  float: left;
+  width: 450px;
+  min-width: 400px;
+  height: 400px;
+  /*background-color: #14e1ee;*/
+}
+
+/* 底部样式  */
+.container .footer {
+  margin-top: 2400px;
+  width: 100%;
+  min-width: 1250px;
+  height: 72px;
+  background-color: #1D428A;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.footer .footerFirstLine,.footerSecondLine {
+  height: 36px;
+  line-height: 36px;
+  font-size: 14px;
+}
+
+.footer a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.tooltip , .tooltip1 , .tooltip2 ,.tooltip3 , .tooltip4{
+    position: absolute;
+    width: 120;
+    height: auto;
+    font-family: simsun;
+    font-size: 14px;
+    text-align: center;
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+    border-radius: 5px;
+  }
+
+  .axis {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+  }
+
+  .axis text {
+    fill: black;
+    font-family: sans-serif;
+    font-size: 15px;
+  }

@@ -26,6 +26,7 @@
 
 //添加svg
 var svg0,svg1,svg2,svg3,svg4;
+
 var padding = 50;
   //获取当前DOM宽高
   var div = d3.select(".shotFreByDis");
@@ -63,6 +64,7 @@ function removeSvg(){
   d3.selectAll('svg')
     .remove();
 }
+
 function starShootingChart(data){
   // svg固定宽高
   var width = 500,height = 500;
