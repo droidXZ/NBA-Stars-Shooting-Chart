@@ -651,6 +651,7 @@ function drawShotFreLR(data){
 			.attr("width", function(d,i) {return divW*shotData[i];})
 			.attr("height",div);
 	drawLineChartLR(svg,shotData,mid,divW,height,div);
+	drawFlag(svg,div);
   //添加一个提示框
   var tooltip = d3.select("body")
                   .append("div")
@@ -726,6 +727,7 @@ function drawFieldGoalLR(data){
 			.attr("height",div)
 
 	drawLineChartLR(svg,shotData,mid,divW*100,height,div);
+	drawFlag(svg,div);
   //添加一个提示框
   var tooltip = d3.select("body")
                   .append("div")
@@ -747,6 +749,39 @@ function drawFieldGoalLR(data){
     tooltip.style("opacity",0.0);
   });
 
+}
+/**
+ * 绘制flag
+ */
+function drawFlag(svg,div){
+	var padding = 50;
+	svg.append("rect")
+	   .attr("fill","none")
+	   .attr("x",padding+20)
+	   .attr("y",padding)
+	   .attr("width",div+2)
+	   .attr("height",div+2)
+	   .attr("fill","none")
+       .attr("stroke","rgba(110, 200, 110, 1)")
+       .attr("stroke-width",2);
+    svg.append("text")
+    	.text("Left")
+	   .attr("x",padding+div+30)
+	   .attr("y",padding+div+2);
+	   
+	svg.append("rect")
+	   .attr("fill","none")
+	   .attr("x",padding+80)
+	   .attr("y",padding)
+	   .attr("width",div+2)
+	   .attr("height",div+2)
+	   .attr("fill","none")
+       .attr("stroke","rgba(180, 130, 220, 1)")
+       .attr("stroke-width",2);
+    svg.append("text")
+    	.text("Right")
+	   .attr("x",padding+div+90)
+	   .attr("y",padding+div+2);
 }
 
 /**
