@@ -1,7 +1,6 @@
 /* 通用工具 */
 // 调用加载json数据进行绘制
 
-
 function starShootingChart(data){
   // svg固定宽高
   var width = 500,height = 500;
@@ -851,3 +850,21 @@ function SvgMouseover(distance){
       .attr("stroke","#c3c1c8")
       .attr("stroke-width",5);
 }
+
+function loadDataToDraw(){
+  d3.json("json/16-17season.json",function(d){
+
+      console.log(d.resultSets[0].headers);
+      starShootingChart(d);
+
+      var data = getData(d,currentStarId);
+
+      drawShotFreByDis(getShotFreData(data));
+      drawShotFGByDis(getShotFGData(data));
+      drawShotFreLR(data);
+      drawFieldGoalLR(data);
+
+  });
+}
+
+loadDataToDraw();

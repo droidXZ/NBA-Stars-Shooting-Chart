@@ -6,23 +6,6 @@
   // 判断点击change按钮次数，只加载一次列表
   var clickTimes = 0;
   bindStarData();
-  var loadDataToDraw = function (){
-    d3.json("json/16-17season.json",function(d){
-
-      	console.log(d.resultSets[0].headers);
-        starShootingChart(d);
-
-        var data = getData(d,currentStarId);
-
-      	drawShotFreByDis(getShotFreData(data));
-        drawShotFGByDis(getShotFGData(data));
-      	drawShotFreLR(data);
-      	drawFieldGoalLR(data);
-
-    });
-  }
-
-  loadDataToDraw();
   document.getElementsByClassName('buttonBox')[0].onclick = function(){
     document.getElementsByClassName('selectPlayer')[0].style.display = 'block';
     // 绑定搜索框球星列表
