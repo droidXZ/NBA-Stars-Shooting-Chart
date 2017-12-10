@@ -194,11 +194,11 @@ function drawShotFreByDis(data) {
   SVG.append("line").attr("class","lineClass1");//用于Mouseover事件
   // 设置比例尺
   var xScale = d3.scale.linear()
-          .domain([0,30])
-          .range([padding,width - padding]);
+                        .domain([0,30])
+                        .range([padding,width - padding]);
   var yScale = d3.scale.linear()
-          .domain([0,0.25])
-          .range([padding,height]);
+                        .domain([0,0.25])
+                        .range([padding,height - padding]);
 
   var dataset = data[0].Fre;
   //绘制散点

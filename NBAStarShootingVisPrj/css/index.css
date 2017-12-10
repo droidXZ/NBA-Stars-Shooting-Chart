@@ -382,12 +382,12 @@
 
 
 /*test*/
+
 .warper_right .shotFreByDis {
   float: left;
   width: 450px;
   min-width: 400px;
   height: 350px;
-  /*background-color: #6adfeb;*/
 }
 
 .warper_right .shotFreLeftVsRight {
@@ -395,7 +395,6 @@
   width: 450px;
   min-width: 400px;
   height: 350px;
-  /*background-color: #ebe43c;*/
 }
 
 .warper_right .shotFGByDis {
@@ -403,7 +402,6 @@
   width: 450px;
   min-width: 400px;
   height: 350px;
-  /*background-color: #22f024;*/
 }
 
 .warper_right .shotFGLeftVsRight {
@@ -411,5 +409,5 @@
   width: 450px;
   min-width: 400px;
   height: 350px;
-  /*background-color: #14e1ee;*/
-}
+
+} 
