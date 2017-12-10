@@ -192,7 +192,7 @@ function getShotFreData(data) {
 function drawShotFreByDis(data) {
 
   SVG = svg1;
-  
+
   SVG.append("line").attr("class","lineClass1");//用于Mouseover事件
   // 设置比例尺
   var xScale = d3.scale.linear()
@@ -325,7 +325,7 @@ function drawShotFGByDis(data){
         var div = (width-2*padding)/31;
 
         var index = (x-padding)*2/div;
-        
+
         //显示提示框
         showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4);
 
@@ -445,6 +445,7 @@ function showCurSelectedpPoint(index){
                   .attr("class","tooltip")
                   .style("opacity",0.0);
 
+
   d3.select(".shotFGByDis")
     .selectAll("circle")
     .attr("fill",function(d,i){
@@ -475,37 +476,41 @@ function showCurSelectedpPoint(index){
 
 function showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4){
   var left,top;
-
+  var yScale = d3.scale.linear()
+                       .domain([0,0.25])
+                       .range([padding,height - padding]);
   d3.select(".shotFreByDis")
     .selectAll("circle")
     .attr("",function(d,i){
       if(index/2 >= i && index/2 < i + 1){
         if (i<=24) {
-          left = 11.483870967741936 * i;
+          left = 15 * i;
         }
         else{
-          left = 11.483870967741936 * i - 100;
+          left = 15 * i - 100;
         }
         tooltip1.html("distance: " + i + "ft" + "<br/>" + "Fre %: " + Math.round(d*100) + "%")
-                .style("left", (660 + left) + "px")
-                .style("top", (160) + "px")
+                .style("left", (810 + left) + "px")
+                .style("top", (120 + 400 - yScale(d)) + "px")
                 .style("opacity",0.8);
       }
   })
-
+  yScale = d3.scale.linear()
+                       .domain([0,1])
+                       .range([padding,height - padding]);
   d3.select(".shotFGByDis")
     .selectAll("circle")
     .attr("",function(d,i){
       if(index/2 >= i && index/2 < i + 1){
         if (i<=24) {
-          left = 11.483870967741936 * i;
+          left = 15 * i;
         }
         else{
-          left = 11.483870967741936 * i - 100;
+          left = 15 * i - 100;
         }
         tooltip2.html("distance: " + i + "ft" + "<br/>" + "FG %: " + Math.round(d*100) + "%")
-                .style("left", (660 + left) + "px")
-                .style("top", (560) + "px")
+                .style("left", (810 + left) + "px")
+                .style("top", (520 + 400 - yScale(d)) + "px")
                 .style("opacity",0.8);
       }
     })
@@ -530,7 +535,7 @@ function showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4){
           tooltip3.html("distance: " + i + "ft" + "<br/>" +
                       "left " + "Fre : " + leftData + "%" + "<br/>" +
                       "right " + "Fre : " + rightData + "%")
-                .style("left", (1230) + "px")
+                .style("left", (1660) + "px")
                 .style("top", (410 - top) + "px")
                 .style("opacity",0.8);
       }
@@ -555,7 +560,7 @@ function showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4){
           tooltip4.html("distance: " + i + "ft" + "<br/>" +
                       "left " + "FG %: " + leftData + "%" + "<br/>" +
                       "right " + "FG %: " + rightData + "%")
-                .style("left", (1230) + "px")
+                .style("left", (1660) + "px")
                 .style("top", (810 - top) + "px")
                 .style("opacity",0.8);
       }
@@ -564,7 +569,7 @@ function showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4){
 
 //隐藏tooltip提示框
 function hideTooltip(tooltip1,tooltip2,tooltip3,tooltip4){
-  
+
   tooltip1.style("opacity",0.0);
   tooltip2.style("opacity",0.0);
   tooltip3.style("opacity",0.0);
@@ -767,7 +772,7 @@ function drawFieldGoalLR(data){
 		}
 	})
   .on("mouseout",function(){
-    
+
   });
 
 }
@@ -809,7 +814,7 @@ function drawFlag(svg,div){
     	.text("Left")
 	   .attr("x",padding+div+30)
 	   .attr("y",padding+div+2);
-	   
+
 	svg.append("rect")
 	   .attr("fill","none")
 	   .attr("x",padding+80)

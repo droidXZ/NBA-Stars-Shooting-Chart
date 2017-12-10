@@ -383,31 +383,31 @@
 
 /*test*/
 
-.warper_right .shotFreByDis {
+.warper_right .shotFreByDis,.shotFGByDis {
   float: left;
-  width: 450px;
-  min-width: 400px;
-  height: 350px;
+  width: 550px;
+  min-width: 450px;
+  height: 400px;
 }
 
-.warper_right .shotFreLeftVsRight {
+.warper_right .shotFreLeftVsRight,.shotFGLeftVsRight {
   float: right;
-  width: 450px;
-  min-width: 400px;
-  height: 350px;
+  width: 550px;
+  min-width: 450px;
+  height: 400px;
 }
 
-.warper_right .shotFGByDis {
+/*.warper_right .shotFGByDis {
   float: left;
-  width: 450px;
-  min-width: 400px;
+  width: 550px;
+  min-width: 450px;
   height: 350px;
-}
+}*/
 
-.warper_right .shotFGLeftVsRight {
+/*.warper_right .shotFGLeftVsRight {
   float: right;
-  width: 450px;
-  min-width: 400px;
+  width: 550px;
+  min-width: 450px;
   height: 350px;
 
-} 
+}*/
