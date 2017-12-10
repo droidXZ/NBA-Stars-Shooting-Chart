@@ -721,8 +721,12 @@ function drawFieldGoalLR(data){
 	var dataset = getGoalByDistance(data);
 	var shotData = [];
 	for(i=0;i<=30;i++){
-		shotData.push(dataset[i].goal_left/dataset[i].shot_left);
-		shotData.push(dataset[i].goal_right/dataset[i].shot_right);
+    if(dataset[i].shot_left!=0)
+		  shotData.push(dataset[i].goal_left/dataset[i].shot_left);
+    else shotData.push(0);
+    if(dataset[i].shot_right!=0)
+		  shotData.push(dataset[i].goal_right/dataset[i].shot_right);
+    else shotData.push(0);
 	}
 	var divW = (mid-padding)/100;
 
