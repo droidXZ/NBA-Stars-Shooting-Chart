@@ -107,10 +107,12 @@ function starShootingChart(data){
     .enter()
     .append("rect")
     .attr("x",function(d){
-      return xScale(d.loc_x);
+      if(yScale(d.loc_y) <= 350)
+        return xScale(d.loc_x);
     })
     .attr("y",function(d){
-      return yScale(d.loc_y);
+      if(yScale(d.loc_y) <=350)
+        return yScale(d.loc_y);
     })
     .attr("width",8)
     .attr("height",8)
@@ -272,7 +274,11 @@ function getShotFGData(data) {
   var el = [];
   //计算每个距离命中率
   for (i = 0; i <= 30; i++) {
-    el[el.length] = goalTimes[i] / shotTimes[i];
+    if(shotTimes[i] == 0){
+      el[el.length] = 0;
+    }else {
+      el[el.length] = goalTimes[i] / shotTimes[i];
+    }
   }
 
   item.FG = el;
