@@ -100,6 +100,7 @@ function starShootingChart(data){
 
     svg.append("circle").attr("class","circleClass");//用于mouseover事件
 }
+
 //获取球员投篮命中与否 距离 位置。
 function getShotDetailData(data){
   //处理数据
@@ -156,15 +157,17 @@ function getShotFreData(data) {
 function drawShotFreByDis(data) {
 
   var padding = 50;
-	var SVG = d3.select(".shotFreByDis")
-      				.append("svg")
-      				.attr("width","100%")
-      				.attr("height","100%");
-
   //获取当前DOM宽高
   var div = d3.select(".shotFreByDis");
   var width = div[0][0].offsetWidth;  //456
   var height = div[0][0].offsetHeight;  //400
+
+	var SVG = d3.select(".shotFreByDis")
+      				.append("svg")
+      				.attr("width",width)
+      				.attr("height",height);
+
+  
   SVG.append("line").attr("class","lineClass1");//用于Mouseover事件
   // 设置比例尺
   var xScale = d3.scale.linear()
@@ -195,13 +198,12 @@ function drawShotFreByDis(data) {
               if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
                 //每一段的长度
                 var div = (width-2*padding)/31;
-                //计算当前位置属于第几块
-                var index = (x-padding)*2/div;
+                var index = Math.floor((x-padding)*2/div);
 
                 //显示提示框
-                showTooltip(index,tooltip1,tooltip2);
-
-                LeftVsRightMouseover(Math.floor(index));
+                showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4);
+                //显示选中的矩形
+                LeftVsRightMouseover(index);
                 }
               else{
                 LeftVsRightMouseover(-1);
@@ -264,8 +266,8 @@ function drawShotFGByDis(data){
 
   var SVG = d3.select(".shotFGByDis")
               .append("svg")
-              .attr("width","100%")
-              .attr("height","100%");
+              .attr("width",width)
+              .attr("height",height);
 
 // 设置比例尺
   var xScale = d3.scale.linear()
@@ -292,6 +294,11 @@ function drawShotFGByDis(data){
                     })
                     .attr("fill","transparent");
 
+  //添加一个提示框
+  var tooltip = d3.select("body")
+                  .append("div")
+                  .attr("class","tooltip")
+                  .style("opacity",0.0);
 
     SVG.on("mousemove",function(d,i){
       var x = d3.event.offsetX;
@@ -300,13 +307,13 @@ function drawShotFGByDis(data){
       if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
         //每一块的长度
         var div = (width-2*padding)/31;
-        //计算当前位置属于第几块
+
         var index = (x-padding)*2/div;
-
+        
         //显示提示框
-        showTooltip(index,tooltip1,tooltip2);
+        showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4);
 
-        LeftVsRightMouseover(Math.floor(index));
+        LeftVsRightMouseover(Math.floor((x-padding)*2/div));
         }
       else{
         LeftVsRightMouseover(-1);
@@ -414,11 +421,11 @@ function drawTitle(SVG,title){
 //显示当前选中
 function showCurSelectedpPoint(index){
 
-  // //添加一个提示框
-  // var tooltip = d3.select("body")
-  //                 .append("div")
-  //                 .attr("class","tooltip")
-  //                 .style("opacity",0.0);
+  //添加一个提示框
+  var tooltip = d3.select("body")
+                  .append("div")
+                  .attr("class","tooltip")
+                  .style("opacity",0.0);
 
   d3.select(".shotFGByDis")
     .selectAll("circle")
@@ -446,20 +453,20 @@ function showCurSelectedpPoint(index){
 }
 
 function showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4){
-  
-  /*
-  .shotFreByDis
-  .shotFGByDis
-  .shotFreLeftVsRight
-  .shotFGLeftVsRight
-  */
+  var left,top;
 
   d3.select(".shotFreByDis")
     .selectAll("circle")
     .attr("",function(d,i){
       if(index/2 >= i && index/2 < i + 1){
+        if (i<=24) {
+          left = 11.483870967741936 * i;
+        }
+        else{
+          left = 11.483870967741936 * i - 100;
+        }
         tooltip1.html("distance: " + i + "ft" + "<br/>" + "Fre %: " + Math.round(d*100) + "%")
-                .style("left", (810) + "px")
+                .style("left", (660 + left) + "px")
                 .style("top", (160) + "px")
                 .style("opacity",0.8);
       }
@@ -469,25 +476,69 @@ function showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4){
     .selectAll("circle")
     .attr("",function(d,i){
       if(index/2 >= i && index/2 < i + 1){
+        if (i<=24) {
+          left = 11.483870967741936 * i;
+        }
+        else{
+          left = 11.483870967741936 * i - 100;
+        }
         tooltip2.html("distance: " + i + "ft" + "<br/>" + "FG %: " + Math.round(d*100) + "%")
-                .style("left", (810) + "px")
+                .style("left", (660 + left) + "px")
                 .style("top", (560) + "px")
                 .style("opacity",0.8);
       }
     })
 
-  // d3.select(".shotFreLeftVsRight")
-  //   .selectAll("rect")
-  //   .attr("",function(d,i){
-  //     if(index/2 >= i && index/2 < i + 1){
-  //       tooltip3.html("distance: " + i + "ft" + "<br/>" +
-  //                     "left " + "Fre %: " + d[i*2]*100 + "%" + "<br/>" +
-  //                     "right " + "FG %: " + d[i*2+1]*100 + "%")
-  //               .style("left", (d3.event.pageX) + "px")
-  //               .style("top", (d3.event.pageY + 20) + "px")
-  //               .style("opacity",0.8);
-  //     }
-  // })
+  var data = [];
+  d3.select(".shotFreLeftVsRight")
+    .selectAll("rect")
+    .attr("",function(d,i){
+      data[data.length] = d;
+    })
+    .attr("",function(d,i){
+      if(index/2 >= i && index/2 < i + 1){
+          if (i<=24) {
+            top = 9.67741935483871 * i;
+          }
+          else{
+            top = 9.67741935483871 * i - 50;
+          }
+          leftData = Math.round(data[i*2]);
+          rightData = Math.round(data[i*2+1]);
+
+          tooltip3.html("distance: " + i + "ft" + "<br/>" +
+                      "left " + "Fre : " + leftData + "%" + "<br/>" +
+                      "right " + "Fre : " + rightData + "%")
+                .style("left", (1230) + "px")
+                .style("top", (410 - top) + "px")
+                .style("opacity",0.8);
+      }
+  })
+
+  d3.select(".shotFreLeftVsRight")
+    .selectAll("rect")
+    .attr("",function(d,i){
+      data[data.length] = d;
+    })
+    .attr("",function(d,i){
+      if(index/2 >= i && index/2 < i + 1){
+          if (i<=24) {
+            top = 9.67741935483871 * i;
+          }
+          else{
+            top = 9.67741935483871 * i - 50;
+          }
+          leftData = Math.round(data[i*2]);
+          rightData = Math.round(data[i*2+1]);
+
+          tooltip4.html("distance: " + i + "ft" + "<br/>" +
+                      "left " + "FG %: " + leftData + "%" + "<br/>" +
+                      "right " + "FG %: " + rightData + "%")
+                .style("left", (1230) + "px")
+                .style("top", (810 - top) + "px")
+                .style("opacity",0.8);
+      }
+  })
 }
 
 //隐藏tooltip提示框
@@ -500,40 +551,7 @@ function hideTooltip(tooltip1,tooltip2,tooltip3,tooltip4){
 
 }
 
-function showRectTooltip(data,index,tooltip,className,dataName){
-
-  // d3.select(className)
-  //   .selectAll("rect")
-  //   .attr("",function(d,i){
-  //     if(index/2 >= i && index/2 < i + 1){
-  //       if (dataName == "FG") {
-  //         leftData = Math.round(data[i*2] * 100);
-  //         rightData = Math.round(data[i*2+1] * 100);
-
-  //         tooltip.html("distance: " + i + "ft" + "<br/>" +
-  //                     "left " + dataName + " %: " + leftData + "%" + "<br/>" +
-  //                     "right " + dataName + " %: " + rightData + "%")
-  //               .style("left", (d3.event.pageX) + "px")
-  //               .style("top", (d3.event.pageY + 20) + "px")
-  //               .style("opacity",0.8);
-  //       }
-  //       else if (dataName == "Fre") {
-
-  //         leftData = Math.round(data[i*2]);
-  //         rightData = Math.round(data[i*2+1]);
-
-  //         tooltip.html("distance: " + i + "ft" + "<br/>" +
-  //                     "left " + dataName + " : " + leftData + "<br/>" +
-  //                     "right " + dataName + " : " + rightData)
-  //               .style("left", (d3.event.pageX) + "px")
-  //               .style("top", (d3.event.pageY + 20) + "px")
-  //               .style("opacity",0.8);
-  //       }
-  //     }
-  //   })
-}
-
-/**********************************************************************************************/
+/*******************************************************************************************************/
 
 /**
  * 得到每个距离下的左右 投篮数和进球数
@@ -642,15 +660,20 @@ function drawShotFreLR(data){
 			.attr("width", function(d,i) {return divW*shotData[i];})
 			.attr("height",div);
 	drawLineChartLR(svg,shotData,mid,divW,height,div);
+	drawFlag(svg,div);
+  //添加一个提示框
+  var tooltip = d3.select("body")
+                  .append("div")
+                  .attr("class","tooltip")
+                  .style("opacity",0.0);
 
 	svg.on("mousemove",function(){
 		var x = d3.event.offsetX;
 		var y = d3.event.offsetY;
     var index = Math.floor((height-padding-y)*2/div);
-
 		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
       showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4);
-			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
+			LeftVsRightMouseover(index);
 		}
 		else{
 			LeftVsRightMouseover(-1);
@@ -659,7 +682,6 @@ function drawShotFreLR(data){
   .on("mouseout",function(){
     hideTooltip(tooltip1,tooltip2,tooltip3,tooltip4);
   });
-
 }
 
 /**
@@ -714,23 +736,60 @@ function drawFieldGoalLR(data){
 			.attr("height",div)
 
 	drawLineChartLR(svg,shotData,mid,divW*100,height,div);
+	drawFlag(svg,div);
 
 	svg.on("mousemove",function(d,i){
 		var x = d3.event.offsetX;
 		var y = d3.event.offsetY;
-    var index = Math.floor((height-padding-y)*2/div);
 		if(x<=width-padding&&x>=padding&&y>=padding&&y<=height-padding){
+
+      var index = Math.floor((height-padding-y)*2/div);
+      //添加提示框
       showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4);
-			LeftVsRightMouseover(Math.floor((height-padding-y)*2/div));
+			LeftVsRightMouseover(index);
 		}
 		else{
 			LeftVsRightMouseover(-1);
+      hideTooltip(tooltip1,tooltip2,tooltip3,tooltip4);
 		}
 	})
   .on("mouseout",function(){
-    hideTooltip(tooltip1,tooltip2,tooltip3,tooltip4);
+    
   });
 
+}
+/**
+ * 绘制flag
+ */
+function drawFlag(svg,div){
+	var padding = 50;
+	svg.append("rect")
+	   .attr("fill","none")
+	   .attr("x",padding+20)
+	   .attr("y",padding)
+	   .attr("width",div+2)
+	   .attr("height",div+2)
+	   .attr("fill","none")
+       .attr("stroke","rgba(110, 200, 110, 1)")
+       .attr("stroke-width",2);
+    svg.append("text")
+    	.text("Left")
+	   .attr("x",padding+div+30)
+	   .attr("y",padding+div+2);
+	   
+	svg.append("rect")
+	   .attr("fill","none")
+	   .attr("x",padding+80)
+	   .attr("y",padding)
+	   .attr("width",div+2)
+	   .attr("height",div+2)
+	   .attr("fill","none")
+       .attr("stroke","rgba(180, 130, 220, 1)")
+       .attr("stroke-width",2);
+    svg.append("text")
+    	.text("Right")
+	   .attr("x",padding+div+90)
+	   .attr("y",padding+div+2);
 }
 
 /**
@@ -851,3 +910,4 @@ function loadDataToDraw(){
 }
 
 loadDataToDraw();
+
