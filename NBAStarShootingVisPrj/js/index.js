@@ -9,7 +9,6 @@
     //通过点击图片更改当前currentId
     d3.selectAll(".starPicSelect")
       .on("click",function(d){
-        alert(d3.select(this));
         var cDiv = d3.select(this);
         console.log(cDiv);
         //取得点击图片的球星ID和name

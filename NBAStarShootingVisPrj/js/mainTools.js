@@ -38,7 +38,7 @@ function createSvg(){
               .append('svg')
               .attr("class","svg_SSC")
               .attr("width",500)
-              .attr("height",500)
+              .attr("height",362)
               .attr("version",1.1)
               .attr("xmlns","http://www.w3.org/2000/svg");
 
