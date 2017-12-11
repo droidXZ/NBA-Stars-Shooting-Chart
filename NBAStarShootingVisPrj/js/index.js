@@ -4,6 +4,7 @@
   var currentStar = "Russell Westbrook",
       currentStarId = 201566;
   var FDSTR = 'all';
+  var CHANGEEVENT = 0;
   var SHOTDATA = [];
   bindStarData();
   document.getElementsByClassName('buttonBox')[0].onclick = function(){

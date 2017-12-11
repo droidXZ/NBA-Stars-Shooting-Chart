@@ -70,9 +70,14 @@ function createSvg(filterEvent){
 }
 //移除svg
 function removeSvg(filterEvent){
-  if(filterEvent)
-    d3.selectAll('svg_SSC')
-      .remove();
+  if(filterEvent){
+    // d3.selectAll('svg_SSC')
+    //   .selectAll('rect')
+    //   .remove();
+      d3.selectAll('.svg_SSC')
+        .remove();
+      console.log("remove?");
+  }
   else {
     d3.selectAll('svg')
       .remove();
@@ -87,13 +92,14 @@ function starShootingChart(data){
 
   svg = svg0;
   //通过创建 xmlns向svg添加image图像
-  var court = document.createElementNS(xmlns,"image");
-      court.href.baseVal = "img/uipic/court.png";
-      court.setAttributeNS(null,"x",0);
-      court.setAttributeNS(null,"y",0);
-      court.setAttributeNS(null,"width","500px");
-      court.setAttributeNS(null,"height","362px");
-  document.getElementsByClassName('svg_SSC')[0].appendChild(court);
+    var court = document.createElementNS(xmlns,"image");
+        court.href.baseVal = "img/uipic/court.png";
+        court.setAttributeNS(null,"x",0);
+        court.setAttributeNS(null,"y",0);
+        court.setAttributeNS(null,"width","500px");
+        court.setAttributeNS(null,"height","362px");
+    document.getElementsByClassName('svg_SSC')[0].appendChild(court);
+
   var missedColor = "rgba(255, 120, 56, 0.87)",
       hitColor = "rgba(88, 204, 224, 0.87)";
   // 篮筐中心点(250,40);
@@ -150,43 +156,51 @@ function starShootingChart(data){
         .attr("stroke-width",0)
         .attr("stroke","rgba(255,255,255,0)");
     });
-    //添加命中提示
-    d3.selectAll('.sc-tips')
-      .append('svg')
-      .attr("width",500)
-      .attr("height",60)
-      .attr("class","sc_tips_svg");
-    var scTips = ["Missed","Hit"];
-    d3.selectAll('.sc_tips_svg')
-      .selectAll('rect')
-      .data(scTips)
-      .enter()
-      .append("rect")
-      .attr("x",function(d){
-        if(d == "Missed")
-          return 60;
-        else {
-          return 310;
-        }
-      })
-      .attr("y",25)
-      .attr("width",10)
-      .attr("height",10)
-      .attr("fill",function(d){
-        if(d == "Missed")
-          return missedColor;
-        else {
-          return hitColor;
-        }
-      });
 
-    svg.append("circle").attr("class","circleClass");//用于mouseover事件
+      if(CHANGEEVENT == 0){
+        //添加命中提示
+        d3.selectAll('.sc-tips')
+          .append('svg')
+          .attr("width",500)
+          .attr("height",60)
+          .attr("class","sc_tips_svg");
+        var scTips = ["Missed","Hit"];
+        d3.selectAll('.sc_tips_svg')
+          .selectAll('rect')
+          .data(scTips)
+          .enter()
+          .append("rect")
+          .attr("x",function(d){
+            if(d == "Missed")
+              return 60;
+            else {
+              return 310;
+            }
+          })
+          .attr("y",25)
+          .attr("width",10)
+          .attr("height",10)
+          .attr("fill",function(d){
+            if(d == "Missed")
+              return missedColor;
+            else {
+              return hitColor;
+            }
+          });
+
+          CHANGEEVENT ++;
+      }
+
+      svg.append("circle").attr("class","circleClass");//用于mouseover事件
 }
 
 function changeShotDataToDraw(str){
+  removeSvg(true);
+  createSvg(true);
   FDSTR = str;
     d3.json("json/16-17season.json",function(d){
       starShootingChart(d);
+      console.log("succ?");
     });
 }
 

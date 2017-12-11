@@ -422,14 +422,14 @@
 
 /*test*/
 
-.warper_right .shotFreByDis,.shotFGByDis {
+.warper_right .shotFreByDis,.warper_right .shotFGByDis {
   float: left;
   width: 550px;
   min-width: 450px;
   height: 400px;
 }
 
-.warper_right .shotFreLeftVsRight,.shotFGLeftVsRight {
+.warper_right .shotFreLeftVsRight,.warper_right .shotFGLeftVsRight {
   float: right;
   width: 550px;
   min-width: 450px;
