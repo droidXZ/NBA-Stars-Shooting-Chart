@@ -3,6 +3,8 @@
   // 当前默认的球星和球星Id 检索可通过名称 绘制均通过Id进行查找数据
   var currentStar = "Russell Westbrook",
       currentStarId = 201566;
+  var FDSTR = 'all';
+  var SHOTDATA = [];
   bindStarData();
   document.getElementsByClassName('buttonBox')[0].onclick = function(){
     document.getElementsByClassName('selectPlayer')[0].style.display = 'block';
@@ -44,8 +46,10 @@
   document.getElementById('hideButton').onclick = function(){
     document.getElementsByClassName('selectPlayer')[0].style.display = 'none';
     resetSerachPic();
-}
-
+  }
+  document.getElementById("filterSelect").onchange = function(){
+    changeShotDataToDraw(this.value);
+  };
   // 绑定球星数据。
   function bindStarData(){
     d3.json("json/nbaStarData2016-2017.json",function(data){

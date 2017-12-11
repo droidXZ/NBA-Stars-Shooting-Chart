@@ -281,12 +281,51 @@
 .starShootingChart {
   width: 100%;
   min-width: 520px;
-  height: 450px;
+  height: 500px;
   margin-top: 40px;
 }
 
 .starShootingChart h3 {
   margin-left: 220px;
+}
+
+.starShootingChart .sc-tips {
+  position: absolute;
+  width: 500px;
+  height: 80px;
+  left: 70px;
+  bottom: 0;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.sc-tips span {
+  position: absolute;
+  top: 18px;
+  left: 80px;
+}
+
+.sc-tips .spanMarLeft {
+  left: 330px;
+}
+
+.sc-tips .filterData {
+  position: absolute;
+  left: 60px;
+  bottom: 0;
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.filterData select {
+  width: 120px;
+  height: 24px;
+  font-size: 18px;
+  margin-left: 80px;
+  text-align: center;
+}
+
+.filterData select option {
+  width: 120px;
 }
 
 .svg_SSC {

@@ -33,15 +33,23 @@ var padding = 50;
   var width = div[0][0].offsetWidth;  //456
   var height = div[0][0].offsetHeight;  //400
 
-function createSvg(){
-  svg0 = d3.selectAll('.starShootingChart')
-              .append('svg')
-              .attr("class","svg_SSC")
-              .attr("width",500)
-              .attr("height",362)
-              .attr("version",1.1)
-              .attr("xmlns","http://www.w3.org/2000/svg");
-
+function createSvg(filterEvent){
+  if(filterEvent){
+    svg0 = d3.selectAll('.starShootingChart')
+                .append('svg')
+                .attr("class","svg_SSC")
+                .attr("width",500)
+                .attr("height",362)
+                .attr("version",1.1)
+                .attr("xmlns","http://www.w3.org/2000/svg");
+  }else {
+    svg0 = d3.selectAll('.starShootingChart')
+                .append('svg')
+                .attr("class","svg_SSC")
+                .attr("width",500)
+                .attr("height",362)
+                .attr("version",1.1)
+                .attr("xmlns","http://www.w3.org/2000/svg");
   svg1 = d3.select(".shotFreByDis")
               .append("svg")
               .attr("width",width)
@@ -58,11 +66,17 @@ function createSvg(){
               .append("svg")
               .attr("width",width)
               .attr("height",height);
+  }
 }
 //移除svg
-function removeSvg(){
-  d3.selectAll('svg')
-    .remove();
+function removeSvg(filterEvent){
+  if(filterEvent)
+    d3.selectAll('svg_SSC')
+      .remove();
+  else {
+    d3.selectAll('svg')
+      .remove();
+  }
 }
 
 function starShootingChart(data){
@@ -79,7 +93,9 @@ function starShootingChart(data){
       court.setAttributeNS(null,"y",0);
       court.setAttributeNS(null,"width","500px");
       court.setAttributeNS(null,"height","362px");
-      document.getElementsByClassName('svg_SSC')[0].appendChild(court);
+  document.getElementsByClassName('svg_SSC')[0].appendChild(court);
+  var missedColor = "rgba(255, 120, 56, 0.87)",
+      hitColor = "rgba(88, 204, 224, 0.87)";
   // 篮筐中心点(250,40);
   var dataset = getShotDetailData(data);
 
@@ -118,9 +134,9 @@ function starShootingChart(data){
     .attr("height",8)
     .attr("fill",function(d){
       if(d.action_type === 0){
-        return "rgba(83, 87, 161, 1)";
+        return missedColor;
       }else {
-        return "rgba(173, 42, 71, 1)";
+        return hitColor;
       }
     })
     .on("click",function(d){
@@ -134,8 +150,44 @@ function starShootingChart(data){
         .attr("stroke-width",0)
         .attr("stroke","rgba(255,255,255,0)");
     });
+    //添加命中提示
+    d3.selectAll('.sc-tips')
+      .append('svg')
+      .attr("width",500)
+      .attr("height",60)
+      .attr("class","sc_tips_svg");
+    var scTips = ["Missed","Hit"];
+    d3.selectAll('.sc_tips_svg')
+      .selectAll('rect')
+      .data(scTips)
+      .enter()
+      .append("rect")
+      .attr("x",function(d){
+        if(d == "Missed")
+          return 60;
+        else {
+          return 310;
+        }
+      })
+      .attr("y",25)
+      .attr("width",10)
+      .attr("height",10)
+      .attr("fill",function(d){
+        if(d == "Missed")
+          return missedColor;
+        else {
+          return hitColor;
+        }
+      });
 
     svg.append("circle").attr("class","circleClass");//用于mouseover事件
+}
+
+function changeShotDataToDraw(str){
+  FDSTR = str;
+    d3.json("json/16-17season.json",function(d){
+      starShootingChart(d);
+    });
 }
 
 //获取球员投篮命中与否 距离 位置。
@@ -155,7 +207,13 @@ function getShotDetailData(data){
       el.distance = data.resultSets[0].rowSet[i][16],
       el.loc_x = data.resultSets[0].rowSet[i][17],
       el.loc_y = data.resultSets[0].rowSet[i][18];
-      curentStarShotData.push(el);
+      if(FDSTR == "all")
+        curentStarShotData.push(el);
+      if(FDSTR == "missed" && el.action_type == 0){
+        curentStarShotData.push(el);
+      }
+      if(FDSTR == "hit" && el.action_type == 1)
+        curentStarShotData.push(el);
     }
   }
   // 得到当前投篮位置 距离 命中与否、
