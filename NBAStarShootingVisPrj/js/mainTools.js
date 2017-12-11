@@ -953,5 +953,9 @@ function loadDataToDraw(){
   });
 }
 
+//创建svg
 createSvg();
+//加载数据绘制
 loadDataToDraw();
+// 绑定搜索框球星列表
+bindSerachImg();
