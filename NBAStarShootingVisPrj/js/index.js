@@ -109,6 +109,7 @@
 
   //改变当前球星id和球星名称
   function changeCurrentStar(idStr,nameStr){
+    CHANGEEVENT = 0;
     currentStar = nameStr;
     currentStarId = Number(idStr);
     // 在下面调用绘制函数更改当前的信息及图片

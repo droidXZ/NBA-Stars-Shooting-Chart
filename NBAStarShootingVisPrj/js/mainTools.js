@@ -164,32 +164,31 @@ function starShootingChart(data){
           .attr("width",500)
           .attr("height",60)
           .attr("class","sc_tips_svg");
-        var scTips = ["Missed","Hit"];
-        d3.selectAll('.sc_tips_svg')
-          .selectAll('rect')
-          .data(scTips)
-          .enter()
-          .append("rect")
-          .attr("x",function(d){
-            if(d == "Missed")
-              return 60;
-            else {
-              return 310;
-            }
-          })
-          .attr("y",25)
-          .attr("width",10)
-          .attr("height",10)
-          .attr("fill",function(d){
-            if(d == "Missed")
-              return missedColor;
-            else {
-              return hitColor;
-            }
-          });
-
           CHANGEEVENT ++;
       }
+      var scTips = ["Missed","Hit"];
+      d3.selectAll('.sc_tips_svg')
+        .selectAll('rect')
+        .data(scTips)
+        .enter()
+        .append("rect")
+        .attr("x",function(d){
+          if(d == "Missed")
+            return 60;
+          else {
+            return 310;
+          }
+        })
+        .attr("y",25)
+        .attr("width",10)
+        .attr("height",10)
+        .attr("fill",function(d){
+          if(d == "Missed")
+            return missedColor;
+          else {
+            return hitColor;
+          }
+        });
 
       svg.append("circle").attr("class","circleClass");//用于mouseover事件
 }
@@ -611,8 +610,8 @@ function showTooltip(index,tooltip1,tooltip2,tooltip3,tooltip4){
           rightData = Math.round(data[i*2+1]);
 
           tooltip3.html("distance: " + i + "ft" + "<br/>" +
-                      "left " + "Fre : " + leftData + "%" + "<br/>" +
-                      "right " + "Fre : " + rightData + "%")
+                      "left " + "Fre : " + leftData  + "<br/>" +
+                      "right " + "Fre : " + rightData )
                 .style("left", (1660) + "px")
                 .style("top", (410 - top) + "px")
                 .style("opacity",0.8);
