@@ -30,12 +30,19 @@
     document.getElementById("serachButton").onclick = function(){
       var serachStr = document.getElementById("inputV").value.toLowerCase();
       var cDivBox = document.getElementsByClassName("starPicSelect");
+      var reg = new RegExp(serachStr);
+
       for(var i in cDivBox){
         var idStr = cDivBox[i].firstChild.getAttribute("src"),
             nameStr = cDivBox[i].lastChild.innerHTML;
         idStr = idStr.slice(11);
         idStr = idStr.substr(0,idStr.indexOf('.'));
-        if(serachStr == nameStr.toLowerCase() || serachStr == idStr){
+        // if(serachStr == nameStr.toLowerCase() || serachStr == idStr){
+        //   continue;
+        // }else {
+        //   cDivBox[i].style.display = "none";
+        // }
+        if(nameStr.toLowerCase().match(reg)){
           continue;
         }else {
           cDivBox[i].style.display = "none";
